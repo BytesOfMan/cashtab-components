@@ -136,6 +136,7 @@ type Props = {
 	amountSatoshis?: number,
 	sizeQR: number,
 	paymentRequestUrl?: string,
+	onClick?: Function,
 };
 
 class ButtonQR extends React.PureComponent<Props> {

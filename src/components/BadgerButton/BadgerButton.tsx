@@ -9,17 +9,19 @@ import {
 	formatAmount,
 } from '../../utils/badger-helpers';
 
-import { type CurrencyCode } from '../../utils/currency-helpers';
+import type {  CurrencyCode } from '../../utils/currency-helpers';
 
 import colors from '../../styles/colors';
 
 import BitcoinCashImage from '../../images/bitcoin-cash.svg';
 import SLPLogoImage from '../../images/slp-logo.png';
 
-import BadgerBase, {
-	type ButtonStates,
-	type BadgerBaseProps,
-	type ValidCoinTypes,
+import BadgerBase from '../../hoc/BadgerBase';
+
+import type {
+	ButtonStates,
+	BadgerBaseProps,
+	ValidCoinTypes,
 } from '../../hoc/BadgerBase';
 
 import PriceDisplay from '../PriceDisplay';
@@ -45,7 +47,7 @@ const Outer = styled.div`
 	grid-template-columns: max-content;
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled("div")<{hasBorder?: boolean}>`
 	display: grid;
 	grid-gap: 5px;
 	font-family: sans-serif;
@@ -70,6 +72,17 @@ const PriceText = styled.p`
 	align-items: center;
 `;
 
+interface invoiceInfoOutputsObjs {
+	token_id: string,
+	send_amounts: string,
+}
+
+interface invoiceInfoObj {
+	fiatTotal?: number,
+	currency?: string,
+	outputs?: Array<invoiceInfoOutputsObjs>
+}
+
 // Badger Button Props
 type Props = BadgerBaseProps & {
 	text?: string,
@@ -78,14 +91,13 @@ type Props = BadgerBaseProps & {
 	showBorder?: boolean,
 	showQR?: boolean,
 
-	showAmount?: boolean,
 	coinSymbol: string,
 	coinDecimals?: number,
 	coinName?: string,
 
-	invoiceInfo: ?Object,
-	invoiceTimeLeftSeconds: ?number,
-	invoiceFiat: ?number,
+	invoiceInfo?: invoiceInfoObj,
+	invoiceTimeLeftSeconds?: number,
+	invoiceFiat?: number,
 
 	handleClick: Function,
 	step: ButtonStates,
@@ -140,7 +152,7 @@ class BadgerButton extends React.PureComponent<Props> {
 				</Text>
 			);
 			// buttonPriceDisplay if valid bip70 invoice with price information is available
-		} else if (paymentRequestUrl && invoiceFiat != undefined) {
+		} else if (paymentRequestUrl && invoiceFiat !== undefined) {
 			buttonPriceDisplay = (
 				<Text>
 					{getCurrencyPreSymbol(currency)} {formatPriceDisplay(invoiceFiat)}
@@ -159,7 +171,7 @@ class BadgerButton extends React.PureComponent<Props> {
 		);
 		if (!showAmount) {
 			determinedShowAmount = <React.Fragment></React.Fragment>;
-		} else if (showAmount && paymentRequestUrl && !invoiceInfo.currency) {
+		} else if (showAmount && paymentRequestUrl && (!invoiceInfo || !invoiceInfo.currency)) {
 			determinedShowAmount = <PriceText>BIP70 Invoice</PriceText>;
 		}
 		return (

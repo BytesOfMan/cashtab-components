@@ -1,12 +1,10 @@
-// @flow
-
 import * as React from 'react';
 import styled from 'styled-components';
 
 import BitcoinCashImage from '../../images/bitcoin-cash.svg';
 import SLPLogoImage from '../../images/slp-logo.png';
 
-import { type ValidCoinTypes } from '../../hoc/BadgerBase';
+import type { ValidCoinTypes } from '../../hoc/BadgerBase';
 
 import Small from '../../atoms/Small';
 
@@ -40,7 +38,7 @@ const PriceText = styled.p`
 
 // Price display
 type Props = {
-	price: ?string,
+	price?: string,
 	symbol: string,
 
 	coinType?: ValidCoinTypes,

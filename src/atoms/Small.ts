@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-const Small = styled("span")<{muted: boolean}>`
+const Small = styled("span")<{muted?: boolean}>`
 	font-size: 12px;
 	font-weight: 700;
 	line-height: 10px;

@@ -1,9 +1,7 @@
-// @flow
-
 import * as React from 'react';
 import styled from 'styled-components';
 
-const TimeText = styled.p`
+const TimeText = styled("p")<{alert?: boolean}>`
 	font-family: monospace;
 	font-size: 12px;
 	font-weight: 700;
@@ -20,15 +18,15 @@ const TimeText = styled.p`
 // align right so alignment doesn't change when time goes from 10:00 to 9:59
 // Only render if the invoice is active; not paid or expired
 type Props = {
-	invoiceTimeLeftSeconds: ?number,
+	invoiceTimeLeftSeconds?: number,
 };
 
 class InvoiceTimer extends React.PureComponent<Props> {
 	render() {
 		const { invoiceTimeLeftSeconds } = this.props;
 
-		const timeLeftMinutes = Math.floor(invoiceTimeLeftSeconds / 60);
-		const remainderSeconds = invoiceTimeLeftSeconds % 60;
+		const timeLeftMinutes = invoiceTimeLeftSeconds? Math.floor(invoiceTimeLeftSeconds / 60) : 0;
+		const remainderSeconds = invoiceTimeLeftSeconds? invoiceTimeLeftSeconds % 60 : 0;
 
 		const formattedMinutes = `${timeLeftMinutes}`.padStart(2, '0');
 		const formattedSeconds = `${remainderSeconds}`.padStart(2, '0');

@@ -2,7 +2,8 @@
 // Currency endpoints, logic, converters and formatters
 
 import BigNumber from 'bignumber.js';
-import { currencySymbolMap, type CurrencyCode } from './currency-helpers';
+import { currencySymbolMap } from './currency-helpers';
+import type { CurrencyCode } from './currency-helpers';
 
 const buildPriceEndpoint = (currency: CurrencyCode) => {
 	return `https://markets.api.bitcoin.com/rates/convertor?c=BCH&q=${currency}`;
@@ -28,8 +29,8 @@ const getCurrencyPreSymbol = (currency: CurrencyCode) => {
 	return currencySymbolMap[currency];
 };
 
-const formatPriceDisplay = (price: ?number): ?number => {
-	if (!price) return null;
+const formatPriceDisplay = (price?: number): string | undefined => {
+	if (!price) return undefined;
 	if (price > 1) {
 		return price
 			.toLocaleString('en-US', {
@@ -38,11 +39,11 @@ const formatPriceDisplay = (price: ?number): ?number => {
 			})
 			.slice(1);
 	} else {
-		return +price.toFixed(5);
+		return (+price).toFixed(5);
 	}
 };
 
-const formatAmount = (amount: ?number, decimals: ?number): string => {
+const formatAmount = (amount?: number, decimals?: number): string => {
 	if (decimals == null) {
 		return '-.--------';
 	}
@@ -56,12 +57,12 @@ const formatAmount = (amount: ?number, decimals: ?number): string => {
 	return removeTrailing;
 };
 
-const priceToSatoshis = (BCHRate: number, price: number): string => {
+const priceToSatoshis = (BCHRate: number, price: number): number => {
 	const singleDollarValue = new BigNumber(BCHRate);
 	const satoshisPerBCH = new BigNumber(100000000);
 	const singleDollarSatoshis = satoshisPerBCH.div(singleDollarValue);
 
-	return (+singleDollarSatoshis.times(price).integerValue(BigNumber.ROUND_FLOOR)).toString();
+	return (+singleDollarSatoshis.times(price).integerValue(BigNumber.ROUND_FLOOR));
 };
 
 const priceToFiat = (BCHRate: number, price: number): number => {
@@ -72,7 +73,7 @@ const priceToFiat = (BCHRate: number, price: number): number => {
 const fiatToSatoshis = async (
 	currency: CurrencyCode,
 	price: number
-): Promise<string> => {
+): Promise<number> => {
 	const priceRequest = await fetch(buildPriceEndpoint(currency));
 	const result = await priceRequest.json();
 	const fiatPrice = result[currency].rate;
@@ -93,14 +94,14 @@ const bchToFiat = async (
 };
 
 const adjustAmount = (
-	amount?: string | number,
-	decimals: number | undefined,
-	fromSatoshis: ?boolean
-): ?string => {
+	amount?:  number,
+	decimals?: number,
+	fromSatoshis?: boolean
+): string | undefined => {
 	decimals = decimals || 0;
 	const shiftBy = !fromSatoshis ? decimals : decimals * -1;
 
-	return amount ? new BigNumber(amount).shiftedBy(shiftBy).toString() : null;
+	return amount ? new BigNumber(amount).shiftedBy(shiftBy).toString() : undefined;
 };
 
 export {

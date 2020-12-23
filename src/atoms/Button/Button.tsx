@@ -111,6 +111,7 @@ const PendingSpinner = styled.div`
 type Props = {
 	step: ButtonStates,
 	children: React.ReactNode,
+	onClick?: Function,
 };
 
 class Button extends React.PureComponent<Props> {

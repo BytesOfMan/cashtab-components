@@ -10,14 +10,12 @@ import {
 	getTokenInfo,
 } from '../../utils/badger-helpers';
 
-import {
-	getWalletProviderStatus,
-	constants,
-	sendAssets,
-	payInvoice,
-} from 'bitcoincom-link';
+import bitcoincomLink from 'bitcoincom-link';
 
 import type { CurrencyCode } from '../../utils/currency-helpers';
+// Note: seems like there is a type bug in bitcoincomLink
+// Even if not, you are not using it here, so no worries
+const { constants, getWalletProviderStatus, sendAssets, payInvoice } = bitcoincomLink;
 
 declare global {
     interface Window {
@@ -28,7 +26,7 @@ declare global {
 interface sendParamsArr {
 	to: string,
 	protocol: ValidCoinTypes,
-	value: string | null,
+	value?: string,
 	assetId?: string,
 	opReturn?: string[],
 }
@@ -57,13 +55,13 @@ type ButtonStates =
 interface invoiceInfoOutputsObjs {
 	token_id: string,
 	send_amounts: string,
-	}
+}
 
 interface invoiceInfoObj {
-					fiatTotal?: number,
+	fiatTotal?: number,
 	currency?: string,
 	outputs?: Array<invoiceInfoOutputsObjs>
-				}
+}
 
 type BadgerBaseProps = {
 	to: string,
@@ -76,7 +74,7 @@ type BadgerBaseProps = {
 	// Both present to price in coinType absolute amount
 	coinType: ValidCoinTypes,
 	tokenId?: string,
-	amount?: string,
+	amount?: number,
 
 	isRepeatable: boolean,
 	repeatTimeout: number,
@@ -92,11 +90,11 @@ type BadgerBaseProps = {
 	failFn?: Function,
 };
 
-type State = {
+type state = {
 	step: ButtonStates,
 	errors: string[],
 
-	satoshis?: string, // Used when converting fiat to BCH
+	satoshis?: number, // Used when converting fiat to BCH
 	invoiceFiat?: number, // Used to show USD cost of a BCH BIP70 invoice
 
 	coinSymbol?: string,
@@ -116,7 +114,7 @@ type State = {
 };
 
 const BadgerBase = (Wrapped: React.ComponentType<any>) => {
-	return class extends React.Component<BadgerBaseProps, State> {
+	return class extends React.Component<BadgerBaseProps, state> {
 		static defaultProps = {
 			currency: 'USD',
 			coinType: 'BCH',
@@ -127,7 +125,7 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
 			repeatTimeout: REPEAT_TIMEOUT,
 		};
 
-		State = {
+		state = {
 			step: 'fresh',
 
 			satoshis: null,
@@ -278,7 +276,7 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
 			const sendParams : sendParamsArr = {
 				to,
 				protocol: coinType,
-				value: amount || adjustAmount(satoshis, 8, true),
+				value: amount?.toString() || adjustAmount(satoshis, 8, true),
 			};
 			if (coinType === 'SLP') {
 				sendParams.assetId = tokenId;
@@ -541,7 +539,7 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
 				) {
 					this.setState({ step: 'install' });
 				}
-				if (document.getElementById('cashtab')) {
+				if (window && window.bitcoinAbc && window.bitcoinAbc === 'cashtab') {
 					console.log('CashTab is here');
 					this.setState({ step: 'fresh' });
 				}

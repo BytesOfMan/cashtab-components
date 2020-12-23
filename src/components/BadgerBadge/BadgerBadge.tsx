@@ -9,12 +9,14 @@ import {
 	formatAmount,
 } from '../../utils/badger-helpers';
 
-import { type CurrencyCode } from '../../utils/currency-helpers';
+import type { CurrencyCode } from '../../utils/currency-helpers';
 
-import BadgerBase, {
-	type ButtonStates,
-	type BadgerBaseProps,
-	type ValidCoinTypes,
+import BadgerBase from '../../hoc/BadgerBase';
+
+import type {
+	ButtonStates,
+	BadgerBaseProps,
+	ValidCoinTypes,
 } from '../../hoc/BadgerBase';
 
 import BitcoinCashImage from '../../images/bitcoin-cash.svg';
@@ -38,7 +40,7 @@ const Outer = styled.div`
 	grid-template-columns: max-content;
 `;
 
-const Main = styled.div`
+const Main = styled("div") <{ showBorder?: boolean }>`
 	font-family: sans-serif;
 	display: grid;
 	grid-gap: 12px;
@@ -94,6 +96,17 @@ const A = styled.a`
 	}
 `;
 
+interface invoiceInfoOutputsObjs {
+	token_id: string,
+	send_amounts: string,
+}
+
+interface invoiceInfoObj {
+	fiatTotal?: number,
+	currency?: string,
+	outputs?: Array<invoiceInfoOutputsObjs>
+}
+
 // Badger Badger Props
 type Props = BadgerBaseProps & {
 	text?: string,
@@ -110,9 +123,9 @@ type Props = BadgerBaseProps & {
 	showQR?: boolean,
 	showBorder?: boolean,
 
-	invoiceInfo: ?Object,
-	invoiceTimeLeftSeconds: ?number,
-	invoiceFiat: ?number,
+	invoiceInfo?: invoiceInfoObj,
+	invoiceTimeLeftSeconds?: number,
+	invoiceFiat?: number,
 
 	handleClick: Function,
 };
@@ -166,7 +179,7 @@ class BadgerBadge extends React.PureComponent<Props> {
 		// Case 1: no bip70 invoice
 		let displayedPriceInfo = (
 			<Prices>
-				{price != undefined && (
+				{price !== undefined && (
 					<PriceDisplay
 						preSymbol={getCurrencyPreSymbol(currency)}
 						price={formatPriceDisplay(price)}
@@ -184,10 +197,10 @@ class BadgerBadge extends React.PureComponent<Props> {
 			</Prices>
 		);
 		// Case 2: bip70 invoice, supported pay.bitcoin.com invoice with websocket info over-riding props, showAmount={true}
-		if (showAmount && paymentRequestUrl && invoiceInfo.currency) {
+		if (showAmount && paymentRequestUrl && invoiceInfo && invoiceInfo.currency) {
 			displayedPriceInfo = (
 				<Prices>
-					{invoiceFiat != undefined && (
+					{invoiceFiat !== undefined && (
 						<PriceDisplay
 							preSymbol={getCurrencyPreSymbol(currency)}
 							price={formatPriceDisplay(invoiceFiat)}
