@@ -4,12 +4,12 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import {
-	getCurrencyPreSymbol,
-	formatPriceDisplay,
-	formatAmount,
+    getCurrencyPreSymbol,
+    formatPriceDisplay,
+    formatAmount,
 } from '../../utils/badger-helpers';
 
-import type {  CurrencyCode } from '../../utils/currency-helpers';
+import type { CurrencyCode } from '../../utils/currency-helpers';
 
 import colors from '../../styles/colors';
 
@@ -19,9 +19,9 @@ import SLPLogoImage from '../../images/slp-logo.png';
 import BadgerBase from '../../hoc/BadgerBase';
 
 import type {
-	ButtonStates,
-	BadgerBaseProps,
-	ValidCoinTypes,
+    ButtonStates,
+    BadgerBaseProps,
+    ValidCoinTypes,
 } from '../../hoc/BadgerBase';
 
 import PriceDisplay from '../PriceDisplay';
@@ -33,176 +33,183 @@ import Small from '../../atoms/Small';
 import Text from '../../atoms/Text';
 
 const SatoshiText = styled.p`
-	font-size: 12px;
-	margin: 0;
-	display: grid;
-	grid-template-columns: max-content max-content max-content;
-	justify-content: end;
-	grid-gap: 5px;
-	align-items: center;
+    font-size: 12px;
+    margin: 0;
+    display: grid;
+    grid-template-columns: max-content max-content max-content;
+    justify-content: end;
+    grid-gap: 5px;
+    align-items: center;
 `;
 
 const Outer = styled.div`
-	display: grid;
-	grid-template-columns: max-content;
+    display: grid;
+    grid-template-columns: max-content;
 `;
 
-const Wrapper = styled("div")<{hasBorder?: boolean}>`
-	display: grid;
-	grid-gap: 5px;
-	font-family: sans-serif;
-	grid-template-columns: max-content;
-	grid-template-rows: max-content max-content max-content;
-	color: ${colors.fg500};
-	padding: 6px;
-	border: ${(props) =>
-		props.hasBorder ? `1px dashed ${colors.brand700}` : 'none'};
-	border-radius: 4px;
+const Wrapper = styled('div')<{ hasBorder?: boolean }>`
+    display: grid;
+    grid-gap: 5px;
+    font-family: sans-serif;
+    grid-template-columns: max-content;
+    grid-template-rows: max-content max-content max-content;
+    color: ${colors.fg500};
+    padding: 6px;
+    border: ${props =>
+        props.hasBorder ? `1px dashed ${colors.brand700}` : 'none'};
+    border-radius: 4px;
 `;
 
 const PriceText = styled.p`
-	font-family: monospace;
-	font-size: 16px;
-	line-height: 1em;
-	margin: 0;
-	display: grid;
-	grid-gap: 5px;
-	grid-auto-flow: column;
-	justify-content: flex-end;
-	align-items: center;
+    font-family: monospace;
+    font-size: 16px;
+    line-height: 1em;
+    margin: 0;
+    display: grid;
+    grid-gap: 5px;
+    grid-auto-flow: column;
+    justify-content: flex-end;
+    align-items: center;
 `;
 
 interface invoiceInfoOutputsObjs {
-	token_id: string,
-	send_amounts: string,
+    token_id: string;
+    send_amounts: string;
 }
 
 interface invoiceInfoObj {
-	fiatTotal?: number,
-	currency?: string,
-	outputs?: Array<invoiceInfoOutputsObjs>
+    fiatTotal?: number;
+    currency?: string;
+    outputs?: Array<invoiceInfoOutputsObjs>;
 }
 
 // Badger Button Props
 type Props = BadgerBaseProps & {
-	text?: string,
+    text?: string;
 
-	showAmount?: boolean,
-	showBorder?: boolean,
-	showQR?: boolean,
+    showAmount?: boolean;
+    showBorder?: boolean;
+    showQR?: boolean;
 
-	coinSymbol: string,
-	coinDecimals?: number,
-	coinName?: string,
+    coinSymbol: string;
+    coinDecimals?: number;
+    coinName?: string;
 
-	invoiceInfo?: invoiceInfoObj,
-	invoiceTimeLeftSeconds?: number,
-	invoiceFiat?: number,
+    invoiceInfo?: invoiceInfoObj;
+    invoiceTimeLeftSeconds?: number;
+    invoiceFiat?: number;
 
-	handleClick: Function,
-	step: ButtonStates,
+    handleClick: Function;
+    step: ButtonStates;
 };
 
 class BadgerButton extends React.PureComponent<Props> {
-	static defaultProps = {
-		showAmount: true,
-		showBorder: false,
-	};
+    static defaultProps = {
+        showAmount: true,
+        showBorder: false,
+    };
 
-	render() {
-		const {
-			to,
-			step,
-			handleClick,
+    render() {
+        const {
+            to,
+            step,
+            handleClick,
 
-			currency,
-			price,
+            currency,
+            price,
 
-			coinType,
-			coinSymbol,
-			coinDecimals,
-			coinName,
+            coinType,
+            coinSymbol,
+            coinDecimals,
+            coinName,
 
-			amount,
-			showAmount,
+            amount,
+            showAmount,
 
-			text,
-			showBorder,
-			showQR,
-			paymentRequestUrl,
+            text,
+            showBorder,
+            showQR,
+            paymentRequestUrl,
 
-			invoiceInfo,
-			invoiceTimeLeftSeconds,
-			invoiceFiat,
-		} = this.props;
+            invoiceInfo,
+            invoiceTimeLeftSeconds,
+            invoiceFiat,
+        } = this.props;
 
-		const CoinImage = coinType === 'BCH' ? BitcoinCashImage : SLPLogoImage;
+        const CoinImage = coinType === 'BCH' ? BitcoinCashImage : SLPLogoImage;
 
-		// buttonPriceDisplay -- handle different cases for BIP70 invoices
+        // buttonPriceDisplay -- handle different cases for BIP70 invoices
 
-		// buttonPriceDisplay if no price, or if a bip70 invoice is set from a server without supported websocket updates
-		let buttonPriceDisplay = <Text>Badger Pay</Text>;
+        // buttonPriceDisplay if no price, or if a bip70 invoice is set from a server without supported websocket updates
+        let buttonPriceDisplay = <Text>Badger Pay</Text>;
 
-		// buttonPriceDisplay of price set in props and no invoice is set
-		if (price && !paymentRequestUrl) {
-			buttonPriceDisplay = (
-				<Text>
-					{getCurrencyPreSymbol(currency)} {formatPriceDisplay(price)}
-					<Small> {currency}</Small>
-				</Text>
-			);
-			// buttonPriceDisplay if valid bip70 invoice with price information is available
-		} else if (paymentRequestUrl && invoiceFiat !== undefined) {
-			buttonPriceDisplay = (
-				<Text>
-					{getCurrencyPreSymbol(currency)} {formatPriceDisplay(invoiceFiat)}
-					<Small> {currency}</Small>
-				</Text>
-			);
-		}
+        // buttonPriceDisplay of price set in props and no invoice is set
+        if (price && !paymentRequestUrl) {
+            buttonPriceDisplay = (
+                <Text>
+                    {getCurrencyPreSymbol(currency)} {formatPriceDisplay(price)}
+                    <Small> {currency}</Small>
+                </Text>
+            );
+            // buttonPriceDisplay if valid bip70 invoice with price information is available
+        } else if (paymentRequestUrl && invoiceFiat !== undefined) {
+            buttonPriceDisplay = (
+                <Text>
+                    {getCurrencyPreSymbol(currency)}{' '}
+                    {formatPriceDisplay(invoiceFiat)}
+                    <Small> {currency}</Small>
+                </Text>
+            );
+        }
 
-		let determinedShowAmount = (
-			<PriceDisplay
-				coinType={coinType}
-				price={formatAmount(amount, coinDecimals)}
-				symbol={coinSymbol}
-				name={coinName}
-			/>
-		);
-		if (!showAmount) {
-			determinedShowAmount = <React.Fragment></React.Fragment>;
-		} else if (showAmount && paymentRequestUrl && (!invoiceInfo || !invoiceInfo.currency)) {
-			determinedShowAmount = <PriceText>BIP70 Invoice</PriceText>;
-		}
-		return (
-			<Outer>
-				<Wrapper hasBorder={showBorder}>
-					<Text style={{ textAlign: 'center' }}>{text}</Text>
-					{showQR ? (
-						<ButtonQR
-							amountSatoshis={amount}
-							toAddress={to}
-							onClick={handleClick}
-							step={step}
-							paymentRequestUrl={paymentRequestUrl}
-						>
-							{buttonPriceDisplay}
-						</ButtonQR>
-					) : (
-						<Button onClick={handleClick} step={step}>
-							{buttonPriceDisplay}
-						</Button>
-					)}
+        let determinedShowAmount = (
+            <PriceDisplay
+                coinType={coinType}
+                price={formatAmount(amount, coinDecimals)}
+                symbol={coinSymbol}
+                name={coinName}
+            />
+        );
+        if (!showAmount) {
+            determinedShowAmount = <React.Fragment></React.Fragment>;
+        } else if (
+            showAmount &&
+            paymentRequestUrl &&
+            (!invoiceInfo || !invoiceInfo.currency)
+        ) {
+            determinedShowAmount = <PriceText>BIP70 Invoice</PriceText>;
+        }
+        return (
+            <Outer>
+                <Wrapper hasBorder={showBorder}>
+                    <Text style={{ textAlign: 'center' }}>{text}</Text>
+                    {showQR ? (
+                        <ButtonQR
+                            amountSatoshis={amount}
+                            toAddress={to}
+                            onClick={handleClick}
+                            step={step}
+                            paymentRequestUrl={paymentRequestUrl}
+                        >
+                            {buttonPriceDisplay}
+                        </ButtonQR>
+                    ) : (
+                        <Button onClick={handleClick} step={step}>
+                            {buttonPriceDisplay}
+                        </Button>
+                    )}
 
-					{determinedShowAmount}
+                    {determinedShowAmount}
 
-					{invoiceTimeLeftSeconds !== null && (
-						<InvoiceTimer invoiceTimeLeftSeconds={invoiceTimeLeftSeconds} />
-					)}
-				</Wrapper>
-			</Outer>
-		);
-	}
+                    {invoiceTimeLeftSeconds !== null && (
+                        <InvoiceTimer
+                            invoiceTimeLeftSeconds={invoiceTimeLeftSeconds}
+                        />
+                    )}
+                </Wrapper>
+            </Outer>
+        );
+    }
 }
 
 export default BadgerBase(BadgerButton);
