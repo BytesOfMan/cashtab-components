@@ -1,15 +1,15 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-const TimeText = styled("p")<{alert?: boolean}>`
-	font-family: monospace;
-	font-size: 12px;
-	font-weight: 700;
-	line-height: 10px;
-	margin: 0;
-	display: grid;
-	text-align: right;
-	color: ${({ alert = false }) => (alert === true ? 'red' : '#000')};
+const TimeText = styled('p')<{ alert?: boolean }>`
+    font-family: monospace;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 10px;
+    margin: 0;
+    display: grid;
+    text-align: right;
+    color: ${({ alert = false }) => (alert === true ? 'red' : '#000')};
 `;
 
 // Invoice Timer
@@ -18,23 +18,27 @@ const TimeText = styled("p")<{alert?: boolean}>`
 // align right so alignment doesn't change when time goes from 10:00 to 9:59
 // Only render if the invoice is active; not paid or expired
 type Props = {
-	invoiceTimeLeftSeconds?: number,
+    invoiceTimeLeftSeconds?: number;
 };
 
 class InvoiceTimer extends React.PureComponent<Props> {
-	render() {
-		const { invoiceTimeLeftSeconds } = this.props;
+    render() {
+        const { invoiceTimeLeftSeconds } = this.props;
 
-		const timeLeftMinutes = invoiceTimeLeftSeconds? Math.floor(invoiceTimeLeftSeconds / 60) : 0;
-		const remainderSeconds = invoiceTimeLeftSeconds? invoiceTimeLeftSeconds % 60 : 0;
+        const timeLeftMinutes = invoiceTimeLeftSeconds
+            ? Math.floor(invoiceTimeLeftSeconds / 60)
+            : 0;
+        const remainderSeconds = invoiceTimeLeftSeconds
+            ? invoiceTimeLeftSeconds % 60
+            : 0;
 
-		const formattedMinutes = `${timeLeftMinutes}`.padStart(2, '0');
-		const formattedSeconds = `${remainderSeconds}`.padStart(2, '0');
-		const formattedTime = `${formattedMinutes}:${formattedSeconds}`;
-		const isAlert = timeLeftMinutes < 1;
+        const formattedMinutes = `${timeLeftMinutes}`.padStart(2, '0');
+        const formattedSeconds = `${remainderSeconds}`.padStart(2, '0');
+        const formattedTime = `${formattedMinutes}:${formattedSeconds}`;
+        const isAlert = timeLeftMinutes < 1;
 
-		return <TimeText alert={isAlert}>{formattedTime}</TimeText>;
-	}
+        return <TimeText alert={isAlert}>{formattedTime}</TimeText>;
+    }
 }
 
 export default InvoiceTimer;
