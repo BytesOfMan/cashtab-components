@@ -143,11 +143,11 @@ class Button extends React.PureComponent<Props> {
                         <CheckSVG />
                     </CompleteCover>
                 )}
-                {isLogin && <LoginCover>Login to Badger</LoginCover>}
+                {isLogin && <LoginCover>Login to CashTab</LoginCover>}
                 {isInstall && (
                     <WarningCover>
-                        <A href="https://badger.bitcoin.com" target="_blank">
-                            Install Badger & refresh
+                        <A href="https://cashtabapp.com/" target="_blank">
+                            Install CashTab & refresh
                         </A>
                     </WarningCover>
                 )}

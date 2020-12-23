@@ -7,7 +7,7 @@ import { storiesOf } from '@storybook/react/dist/client/preview';
 import Button from './Button';
 import Text from '../Text';
 
-const ButtonText = 'Badger Pay';
+const ButtonText = 'CashTab Pay';
 
 storiesOf('Button', module)
     .add(
@@ -63,6 +63,6 @@ storiesOf('Button', module)
             </Button>
         ),
         {
-            notes: 'Badger plugin not installed, prompt user to install Badger',
+            notes: 'CashTab extension not installed, prompt user to install CashTab',
         },
     );

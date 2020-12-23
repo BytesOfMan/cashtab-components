@@ -9,12 +9,8 @@ import {
     formatAmount,
 } from '../../utils/badger-helpers';
 
-import type { CurrencyCode } from '../../utils/currency-helpers';
 
 import colors from '../../styles/colors';
-
-import BitcoinCashImage from '../../images/bitcoin-cash.svg';
-import SLPLogoImage from '../../images/slp-logo.png';
 
 import BadgerBase from '../../hoc/BadgerBase';
 
@@ -136,8 +132,6 @@ class BadgerButton extends React.PureComponent<Props> {
             invoiceFiat,
         } = this.props;
 
-        const CoinImage = coinType === 'BCH' ? BitcoinCashImage : SLPLogoImage;
-
         // buttonPriceDisplay -- handle different cases for BIP70 invoices
 
         // buttonPriceDisplay if no price, or if a bip70 invoice is set from a server without supported websocket updates
@@ -201,7 +195,7 @@ class BadgerButton extends React.PureComponent<Props> {
 
                     {determinedShowAmount}
 
-                    {invoiceTimeLeftSeconds !== null && (
+                    {invoiceTimeLeftSeconds !== undefined && (
                         <InvoiceTimer
                             invoiceTimeLeftSeconds={invoiceTimeLeftSeconds}
                         />

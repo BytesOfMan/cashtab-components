@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import debounce from 'lodash/debounce';
+import BigNumber from 'bignumber.js';
 
 import {
     fiatToSatoshis,
@@ -9,6 +10,8 @@ import {
     getAddressUnconfirmed,
     getTokenInfo,
 } from '../../utils/badger-helpers';
+
+import  Ticker from '../../atoms/Ticker/'
 
 import bitcoincomLink from 'bitcoincom-link';
 
@@ -21,6 +24,20 @@ const {
     sendAssets,
     payInvoice,
 } = bitcoincomLink;
+
+const getCashTabProviderStatus = () => {
+    console.log(`getCashTabProviderStatus`)
+    if (
+                    window &&
+                    window.bitcoinAbc &&
+                    window.bitcoinAbc === 'cashtab'
+    ) {
+        return true;
+    }
+    return false;
+        
+
+}
 
 declare global {
     interface Window {
@@ -46,7 +63,7 @@ const REPEAT_TIMEOUT = 4 * SECOND;
 const URI_CHECK_INTERVAL = 10 * SECOND;
 
 // Whitelist of valid coinType.
-type ValidCoinTypes = 'BCH' | 'SLP';
+type ValidCoinTypes = string;
 
 // TODO - Login/Install are badger states, others are payment states.  Separate them to be independent
 type ButtonStates =
@@ -122,7 +139,7 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
     return class extends React.Component<BadgerBaseProps, IState> {
         static defaultProps = {
             currency: 'USD',
-            coinType: 'BCH',
+            coinType: Ticker.coinSymbol,
 
             isRepeatable: false,
             watchAddress: false,
@@ -229,7 +246,7 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
                         text: 'CashTab',
                         txInfo: {
                             address: to,
-                            value: 0.05,
+                            value: amount,
                         },
                     },
                     '*',
@@ -244,6 +261,8 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
             }
 
             const walletProviderStatus = getWalletProviderStatus();
+            const cashTabProviderStatus = getCashTabProviderStatus();
+            console.log(`cashtabProviderStatus`, cashTabProviderStatus)
 
             if (
                 typeof window === `undefined` ||
@@ -257,11 +276,11 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
                 this.setState({ step: 'install' });
 
                 if (typeof window !== 'undefined') {
-                    window.open('https://badger.bitcoin.com');
+                    window.open('https://bitcoinabc.org');
                 }
                 return;
             }
-
+            
             if (
                 walletProviderStatus.badger === WalletProviderStatus.AVAILABLE
             ) {
@@ -291,7 +310,7 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
                 protocol: coinType,
                 value: amount?.toString() || adjustAmount(satoshis, 8, true),
             };
-            if (coinType === 'SLP') {
+            if (coinType === Ticker.tokenTicker) {
                 sendParams.assetId = tokenId;
             }
 
@@ -370,7 +389,7 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
                 if (
                     !invoiceInfo ||
                     !invoiceInfo.fiatTotal ||
-                    invoiceInfo.currency !== 'BCH'
+                    invoiceInfo.currency !== Ticker.coinSymbol
                 )
                     return;
                 const invoicePriceBCH = invoiceInfo.fiatTotal;
@@ -502,7 +521,7 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
             if (
                 invoiceInfo !== {} &&
                 invoiceInfo.currency &&
-                invoiceInfo.currency !== 'BCH' &&
+                invoiceInfo.currency !== Ticker.coinSymbol &&
                 invoiceInfo.outputs &&
                 invoiceInfo.outputs[0] &&
                 invoiceInfo.outputs[0].token_id
@@ -518,15 +537,15 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
                     coinName: name,
                 });
             } else if (
-                (!paymentRequestUrl && coinType === 'BCH') ||
-                (invoiceInfo !== null && invoiceInfo.currency === 'BCH')
+                (!paymentRequestUrl && coinType === Ticker.coinSymbol) ||
+                (invoiceInfo !== null && invoiceInfo.currency === Ticker.coinSymbol)
             ) {
                 this.setState({
-                    coinSymbol: 'BCH',
-                    coinDecimals: 8,
-                    coinName: 'Bitcoin Cash',
+                    coinSymbol: Ticker.coinSymbol,
+                    coinDecimals: Ticker.coinDecimals,
+                    coinName: Ticker.coinName,
                 });
-            } else if (!paymentRequestUrl && coinType === 'SLP' && tokenId) {
+            } else if (!paymentRequestUrl && coinType === Ticker.tokenTicker && tokenId) {
                 this.setState({
                     coinSymbol: undefined,
                     coinName: undefined,
@@ -576,7 +595,7 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
                     window.bitcoinAbc &&
                     window.bitcoinAbc === 'cashtab'
                 ) {
-                    console.log('CashTab is here');
+                    //console.log('CashTab is here');
                     this.setState({ step: 'fresh' });
                 }
             }
@@ -699,7 +718,7 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
             if (
                 paymentRequestUrl &&
                 invoiceInfo &&
-                invoiceInfo.currency === 'BCH'
+                invoiceInfo.currency === Ticker.coinSymbol
             ) {
                 calculatedAmount =
                     adjustAmount(invoiceInfo.fiatTotal, coinDecimals, false) ||
@@ -707,22 +726,27 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
             } else if (
                 paymentRequestUrl &&
                 invoiceInfo &&
-                invoiceInfo.currency === 'SLP' &&
+                invoiceInfo.currency === Ticker.tokenTicker &&
                 invoiceInfo.outputs &&
                 invoiceInfo.outputs[0]
             ) {
                 // Sum up the SLP amounts from invoiceInfo.outputs[0].send_amounts
                 const amounts = invoiceInfo.outputs[0].send_amounts;
-                calculatedAmount = '0';
+
+                let calculatedAmountBig = new BigNumber(0);
                 for (let i = 0; i < amounts.length; i++) {
-                    calculatedAmount += amounts[i];
+                    const thisAmount = new BigNumber(amounts[i])
+                    
+                    calculatedAmountBig = calculatedAmountBig.plus(thisAmount)
+                    
                 }
+                calculatedAmount = calculatedAmountBig.toString()
             }
 
             // Only show QR if all requested features can be encoded in the BIP44 URI, or if it's a BIP70 invoice
             const shouldShowQR =
                 (showQR &&
-                    coinType === 'BCH' &&
+                    coinType === Ticker.coinSymbol &&
                     (!opReturn || !opReturn.length)) ||
                 paymentRequestUrl;
 
@@ -730,14 +754,14 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
             let determinedCoinType = coinType;
             if (
                 paymentRequestUrl &&
-                coinSymbol !== 'BCH' &&
+                coinSymbol !== Ticker.coinSymbol &&
                 coinSymbol !== null
             ) {
-                determinedCoinType = 'SLP';
+                determinedCoinType = Ticker.tokenTicker;
             }
-            if (paymentRequestUrl && coinSymbol === 'BCH') {
-                determinedCoinType = 'BCH';
-            }
+            if (paymentRequestUrl && coinSymbol === Ticker.coinSymbol) {
+                determinedCoinType = Ticker.coinSymbol;
+            }            
 
             return (
                 <Wrapped

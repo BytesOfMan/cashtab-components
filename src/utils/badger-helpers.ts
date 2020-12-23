@@ -1,4 +1,3 @@
-// @flow
 // Currency endpoints, logic, converters and formatters
 
 import BigNumber from 'bignumber.js';
@@ -44,7 +43,7 @@ const formatPriceDisplay = (price?: number): string | undefined => {
 };
 
 const formatAmount = (amount?: number, decimals?: number): string => {
-    if (decimals == null) {
+    if (!decimals) {
         return '-.--------';
     }
     if (!amount) {

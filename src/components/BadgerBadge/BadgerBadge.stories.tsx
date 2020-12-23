@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+import  Ticker from '../../atoms/Ticker/'
 
 import { storiesOf } from '@storybook/react/dist/client/preview';
 import { array, boolean, number, select, text } from '@storybook/addon-knobs';
@@ -13,8 +14,6 @@ const defaultOpReturn = [
     '0x6d02',
     'Try out Badger at https://badger.bitcoin.com',
 ];
-
-const coinTypeOptions = ['BCH', 'SLP'];
 
 // [ SPICE, NAKAMOTO, DOGECASH, BROC ]
 const tokenIdOptions = [
@@ -36,7 +35,7 @@ storiesOf('BadgerBadge', module)
                     'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
                 )}
                 opReturn={array('OP_RETURN', [])}
-                tag={text('Button Text', 'Badger Pay')}
+                tag={text('Button Text', 'CashTab Pay')}
                 text={text('Top Text', 'Payment Total')}
                 isRepeatable={boolean('Repeatable payment', false)}
                 repeatTimeout={number('Repeat Timeout (ms)', 4000)}
@@ -88,14 +87,14 @@ storiesOf('BadgerBadge', module)
         ),
         {
             notes:
-                'Pay in any currency, and automagically convert the amount to BCH',
+                `Pay in any currency, and automagically convert the amount to ${Ticker.coinSymbol}`,
         },
     )
     .add(
-        'price in BCH',
+        `price in ${Ticker.coinSymbol}`,
         () => (
             <BadgerBadge
-                coinType="BCH"
+                coinType={Ticker.coinSymbol}
                 amount={number('Amount', 0.0001)}
                 to={text(
                     'To Address',
@@ -104,29 +103,29 @@ storiesOf('BadgerBadge', module)
             />
         ),
         {
-            notes: 'Price in BCH absolute value',
+            notes: `Price in ${Ticker.coinSymbol} absolute value`,
         },
     )
     .add(
-        'price in SLP tokens',
+        `price in ${Ticker.tokenTicker} tokens`,
         () => (
             <BadgerBadge
                 to={text(
                     'To Address',
                     'simpleledger:qq6qcjt6xlkeqzdwkhdvfyl2q2d2wafkgg8phzcqez',
                 )}
-                coinType="SLP"
+                coinType={Ticker.tokenTicker}
                 tokenId={
                     text('Token ID', '') ||
                     select('Token ID Select', tokenIdOptions, tokenIdOptions[0])
                 }
                 amount={number('Amount', 5)}
                 tag="Send Tokens"
-                text="Send SLP Tokens"
+                text={`Send ${Ticker.tokenTicker} tokens`}
             />
         ),
         {
-            notes: 'Enter the token ID and send whichever SLP tokens you want!',
+            notes: `Enter the token ID and send whichever ${Ticker.tokenTicker} tokens you want!`,
         },
     )
     .add(
@@ -312,7 +311,7 @@ storiesOf('BadgerBadge', module)
         },
     )
     .add(
-        'BIP70 Invoicing - BCH, expired',
+        `BIP70 Invoicing - ${Ticker.coinSymbol}, expired`,
         () => (
             <BadgerBadge
                 paymentRequestUrl={text(
@@ -330,11 +329,11 @@ storiesOf('BadgerBadge', module)
             />
         ),
         {
-            notes: 'Expired BCH invoice with no conflicting props',
+            notes: `Expired ${Ticker.coinSymbol} invoice with no conflicting props`,
         },
     )
     .add(
-        'BIP70 Invoicing - SLP, Paid',
+        `BIP70 Invoicing - ${Ticker.tokenTicker}, Paid`,
         () => (
             <BadgerBadge
                 paymentRequestUrl={text(
@@ -352,6 +351,6 @@ storiesOf('BadgerBadge', module)
             />
         ),
         {
-            notes: 'Paid SLP invoice with no conflicting props',
+            notes: `Paid ${Ticker.tokenTicker} invoice with no conflicting props`,
         },
     );

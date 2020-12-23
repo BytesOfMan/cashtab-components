@@ -122,7 +122,7 @@ type Props = BadgerBaseProps & {
 class BadgerBadge extends React.PureComponent<Props> {
     static defaultProps = {
         currency: 'USD',
-        tag: 'Badger Pay',
+        tag: 'CashTab Pay',
         text: 'Payment Total',
         showAmount: true,
         showBrand: false,
@@ -222,7 +222,7 @@ class BadgerBadge extends React.PureComponent<Props> {
                 <Main showBorder={showBorder}>
                     <H3>{text}</H3>
                     {displayedPriceInfo}
-                    {invoiceTimeLeftSeconds !== null && (
+                    {invoiceTimeLeftSeconds !== undefined && (
                         <InvoiceTimer
                             invoiceTimeLeftSeconds={invoiceTimeLeftSeconds}
                         />
