@@ -9,18 +9,12 @@ import {
 	formatAmount,
 } from '../../utils/badger-helpers';
 
-import type { CurrencyCode } from '../../utils/currency-helpers';
-
 import BadgerBase from '../../hoc/BadgerBase';
 
 import type {
 	ButtonStates,
 	BadgerBaseProps,
-	ValidCoinTypes,
 } from '../../hoc/BadgerBase';
-
-import BitcoinCashImage from '../../images/bitcoin-cash.svg';
-import SLPLogoImage from '../../images/slp-logo.png';
 
 import colors from '../../styles/colors';
 
@@ -32,8 +26,6 @@ import ButtonQR from '../../atoms/ButtonQR';
 import Small from '../../atoms/Small';
 import Text from '../../atoms/Text';
 import H3 from '../../atoms/H3';
-
-const PRICE_UPDATE_INTERVAL = 60 * 1000;
 
 const Outer = styled.div`
 	display: grid;
@@ -168,8 +160,6 @@ class BadgerBadge extends React.PureComponent<Props> {
 			showBorder,
 			showBrand,
 		} = this.props;
-
-		const CoinImage = coinType === 'BCH' ? BitcoinCashImage : SLPLogoImage;
 
 		// Handle cases for displaying price
 		// Case 1: no bip70 invoice

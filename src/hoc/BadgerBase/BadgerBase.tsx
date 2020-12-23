@@ -45,7 +45,7 @@ type ValidCoinTypes = 'BCH' | 'SLP';
 
 // TODO - Login/Install are badger states, others are payment states.  Separate them to be independent
 type ButtonStates =
-	| 'fresh'
+	 'fresh'
 	| 'pending'
 	| 'complete'
 	| 'expired'
@@ -90,7 +90,7 @@ type BadgerBaseProps = {
 	failFn?: Function,
 };
 
-type state = {
+interface IState  {
 	step: ButtonStates,
 	errors: string[],
 
@@ -114,7 +114,8 @@ type state = {
 };
 
 const BadgerBase = (Wrapped: React.ComponentType<any>) => {
-	return class extends React.Component<BadgerBaseProps, state> {
+	return class extends React.Component<BadgerBaseProps, IState> {
+		
 		static defaultProps = {
 			currency: 'USD',
 			coinType: 'BCH',
@@ -126,26 +127,26 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
 		};
 
 		state = {
-			step: 'fresh',
+			step: 'fresh' as ButtonStates,
+			
+			satoshis: undefined,
+			coinSymbol: undefined,
+			coinDecimals: undefined,
+			coinName: undefined,
 
-			satoshis: null,
-			coinSymbol: null,
-			coinDecimals: null,
-			coinName: null,
+			unconfirmedCount: undefined,
+			invoiceInfo: undefined,
+			invoiceFiat: undefined,
+			invoiceTimeLeftSeconds: undefined,
 
-			unconfirmedCount: null,
-			invoiceInfo: {},
-			invoiceFiat: null,
-			invoiceTimeLeftSeconds: null,
-
-			intervalPrice: null,
-			intervalInvoicePrice: null,
-			intervalLogin: null,
-			intervalUnconfirmed: null,
-			intervalTimer: null,
+			intervalPrice: undefined,
+			intervalInvoicePrice: undefined,
+			intervalLogin: undefined,
+			intervalUnconfirmed: undefined,
+			intervalTimer: undefined,
 			errors: [],
 
-			websocketInvoice: null,
+			websocketInvoice: undefined,
 		};
 
 		addError = (error: string) => {
@@ -176,13 +177,14 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
 
 			this.setState({
 				step: 'complete',
-				unconfirmedCount: unconfirmedCountInt + 1,
+				unconfirmedCount: unconfirmedCountInt? unconfirmedCountInt + 1 : 1,
 			});
 
 			if (isRepeatable) {
 				this.startRepeatable();
 			} else {
-				intervalUnconfirmed && clearInterval(intervalUnconfirmed);
+				intervalUnconfirmed && clearInterval(intervalUnconfirmed);				
+				
 			}
 			// If invoice is paid, clear timer, and set secondsLeft to null to hide clock
 			intervalTimer && clearInterval(intervalTimer);
@@ -206,7 +208,6 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
 				failFn,
 				opReturn,
 				coinType,
-				isRepeatable,
 				tokenId,
 				paymentRequestUrl,
 			} = this.props;
@@ -563,7 +564,7 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
 			websocketInvoice && websocketInvoice.close();
 		}
 
-		componentDidUpdate(prevProps: BadgerBaseProps, prevState : State) {
+		componentDidUpdate(prevProps: BadgerBaseProps, prevState : IState) {
 			if (typeof window !== 'undefined') {
 				const {
 					currency,
@@ -597,7 +598,7 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
 					// reset all invoice info, then set it up again
 					this.setState({
 						step: 'fresh',
-						invoiceInfo: {},
+						invoiceInfo: undefined,
 						invoiceFiat: undefined,
 						invoiceTimeLeftSeconds: undefined,
 					});
