@@ -245,7 +245,6 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
             ) {
                 console.log(`Cash tab present, dispatching msg`);
                 console.log(`Amount here is`, amount)
-                console.log(`price here is`, price)
                 console.log(`satoshis here`, satoshis)
                 return window.postMessage(
                     {
@@ -253,7 +252,7 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
                         text: 'CashTab',
                         txInfo: {
                             address: to,
-                            value: typeof satoshis !== 'undefined' ? satoshis/1e8 : 0,
+                            value: typeof satoshis !== 'undefined' ? satoshis/1e8 : amount,
                         },
                     },
                     '*',
