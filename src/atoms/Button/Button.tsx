@@ -1,5 +1,3 @@
-// @flow
-
 import * as React from 'react';
 import styled, { css, keyframes } from 'styled-components';
 
@@ -8,6 +6,8 @@ import colors from '../../styles/colors';
 
 import CheckSVG from '../../images/CheckSVG';
 import LoadSVG from '../../images/LoadSVG';
+
+import Ticker from '../../atoms/Ticker/'
 
 const A = styled.a`
     color: inherit;
@@ -146,7 +146,7 @@ class Button extends React.PureComponent<Props> {
                 {isLogin && <LoginCover>Login to CashTab</LoginCover>}
                 {isInstall && (
                     <WarningCover>
-                        <A href="https://cashtabapp.com/" target="_blank">
+                        <A href={Ticker.installLink} target="_blank">
                             Install CashTab & refresh
                         </A>
                     </WarningCover>

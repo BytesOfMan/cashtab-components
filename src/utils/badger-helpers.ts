@@ -3,9 +3,10 @@
 import BigNumber from 'bignumber.js';
 import { currencySymbolMap } from './currency-helpers';
 import type { CurrencyCode } from './currency-helpers';
+import Ticker from '../atoms/Ticker/'        
 
 const buildPriceEndpoint = (currency: CurrencyCode) => {
-    return `https://markets.api.bitcoin.com/rates/convertor?c=BCH&q=${currency}`;
+    return `https://api.coingecko.com/api/v3/simple/price?ids=${Ticker.coingeckoId}&vs_currencies=${currency}&include_last_updated_at=true`;
 };
 
 const getAddressUnconfirmed = async (address: string): Promise<string[]> => {
@@ -78,8 +79,8 @@ const fiatToSatoshis = async (
     price: number,
 ): Promise<number> => {
     const priceRequest = await fetch(buildPriceEndpoint(currency));
-    const result = await priceRequest.json();
-    const fiatPrice = result[currency].rate;
+    const result = await priceRequest.json();    
+    const fiatPrice = result[Ticker.coingeckoId][currency.toLowerCase()];
     const satoshis = priceToSatoshis(fiatPrice, price);
     return satoshis;
 };

@@ -11,7 +11,7 @@ import {
     getTokenInfo,
 } from '../../utils/badger-helpers';
 
-import  Ticker from '../../atoms/Ticker/'
+import Ticker from '../../atoms/Ticker/'
 
 import bitcoincomLink from 'bitcoincom-link';
 
@@ -19,14 +19,13 @@ import type { CurrencyCode } from '../../utils/currency-helpers';
 // Note: seems like there is a type bug in bitcoincomLink
 // Even if not, you are not using it here, so no worries
 const {
-    constants,
-    getWalletProviderStatus,
     sendAssets,
     payInvoice,
 } = bitcoincomLink;
 
 const getCashTabProviderStatus = () => {
     console.log(`getCashTabProviderStatus`)
+    console.log(window.bitcoinAbc)
     if (
                     window &&
                     window.bitcoinAbc &&
@@ -53,12 +52,9 @@ interface sendParamsArr {
     opReturn?: string[];
 }
 
-const { WalletProviderStatus } = constants;
-
 const SECOND = 1000;
 
 const PRICE_UPDATE_INTERVAL = 60 * SECOND;
-const INTERVAL_LOGIN = 1 * SECOND;
 const REPEAT_TIMEOUT = 4 * SECOND;
 const URI_CHECK_INTERVAL = 10 * SECOND;
 
@@ -225,6 +221,7 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
         handleClick = () => {
             const {
                 amount,
+                price,
                 to,
                 successFn,
                 failFn,
@@ -234,25 +231,6 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
                 paymentRequestUrl,
             } = this.props;
 
-            if (
-                window &&
-                window.bitcoinAbc &&
-                window.bitcoinAbc === 'cashtab'
-            ) {
-                console.log(`Cash tab present, dispatching msg`);
-                return window.postMessage(
-                    {
-                        type: 'FROM_PAGE',
-                        text: 'CashTab',
-                        txInfo: {
-                            address: to,
-                            value: amount,
-                        },
-                    },
-                    '*',
-                );
-            }
-
             const { satoshis } = this.state;
 
             // Satoshis might not set be set during server rendering
@@ -260,31 +238,48 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
                 return;
             }
 
-            const walletProviderStatus = getWalletProviderStatus();
-            const cashTabProviderStatus = getCashTabProviderStatus();
-            console.log(`cashtabProviderStatus`, cashTabProviderStatus)
+            if (
+                window &&
+                window.bitcoinAbc &&
+                window.bitcoinAbc === 'cashtab'
+            ) {
+                console.log(`Cash tab present, dispatching msg`);
+                console.log(`Amount here is`, amount)
+                console.log(`price here is`, price)
+                console.log(`satoshis here`, satoshis)
+                return window.postMessage(
+                    {
+                        type: 'FROM_PAGE',
+                        text: 'CashTab',
+                        txInfo: {
+                            address: to,
+                            value: typeof satoshis !== 'undefined' ? satoshis/1e8 : 0,
+                        },
+                    },
+                    '*',
+                );
+            }
+
+            
+
+            const walletProviderStatus = getCashTabProviderStatus();            
 
             if (
                 typeof window === `undefined` ||
-                (walletProviderStatus.badger ===
-                    WalletProviderStatus.NOT_AVAILABLE &&
-                    walletProviderStatus.android ===
-                        WalletProviderStatus.NOT_AVAILABLE &&
-                    walletProviderStatus.ios ===
-                        WalletProviderStatus.NOT_AVAILABLE)
+                (!walletProviderStatus)
             ) {
                 this.setState({ step: 'install' });
 
                 if (typeof window !== 'undefined') {
-                    window.open('https://bitcoinabc.org');
+                    window.open(Ticker.installLink);
                 }
                 return;
             }
             
             if (
-                walletProviderStatus.badger === WalletProviderStatus.AVAILABLE
+                walletProviderStatus
             ) {
-                this.setState({ step: 'login' });
+                this.setState({ step: 'fresh' });
                 return;
             }
 
@@ -334,26 +329,9 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
         };
 
         gotoLoginState = () => {
-            // Setup login state, and check if the user is logged in every second
-            this.setState({ step: 'login' });
-            if (typeof window !== 'undefined') {
-                const intervalLogin = setInterval(() => {
-                    const walletProviderStatus = getWalletProviderStatus();
-                    if (
-                        walletProviderStatus.badger ===
-                            WalletProviderStatus.LOGGED_IN ||
-                        walletProviderStatus.android ===
-                            WalletProviderStatus.AVAILABLE ||
-                        walletProviderStatus.ios ===
-                            WalletProviderStatus.AVAILABLE
-                    ) {
-                        clearInterval(intervalLogin);
-                        this.setState({ step: 'fresh' });
-                    }
-                }, INTERVAL_LOGIN);
-
-                this.setState({ intervalLogin });
-            }
+            // Obsolete for CashTab
+            // For now, set to 'install'
+            this.setState({ step: 'install' });            
         };
 
         updateSatoshisFiat = debounce(
@@ -562,6 +540,14 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
             }
         };
 
+        confirmCashTabProviderStatus = () => {
+            console.log(`confirmCashTabProviderStatus called`)
+            const cashTabStatus = getCashTabProviderStatus()
+            if (cashTabStatus) {
+                this.setState({ step: 'fresh' });
+            }
+        }
+
         async componentDidMount() {
             if (typeof window !== 'undefined') {
                 const { price, watchAddress, paymentRequestUrl } = this.props;
@@ -572,32 +558,26 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
                 price && this.setupSatoshisFiat();
                 !paymentRequestUrl && this.setupCoinMeta(); // normal call for setupCoinMeta()
 
-                // Detect Badger and determine if button should show login or install CTA
-                const walletProviderStatus = getWalletProviderStatus();
+                // Detect CashTab and determine if button should show CTA
+                console.log(`window`, window)
+                console.log(`window.bitcoinAbc`, window.bitcoinAbc)
+                const cashTabProviderStatus = getCashTabProviderStatus();
+                console.log(`cashtabProviderStatus`, cashTabProviderStatus)                
+                
+                // Occasionially the cashtab window object is not available on componentDidMount, check later
+                // TODO make this less hacky
+                setTimeout(this.confirmCashTabProviderStatus, 750);
+
+                // Detect CashTab and determine if button should show install CTA
+                const walletProviderStatus = getCashTabProviderStatus();
                 if (
-                    walletProviderStatus.badger ===
-                    WalletProviderStatus.AVAILABLE
+                    walletProviderStatus
                 ) {
-                    this.gotoLoginState();
-                }
-                if (
-                    walletProviderStatus.badger ===
-                        WalletProviderStatus.NOT_AVAILABLE &&
-                    walletProviderStatus.android ===
-                        WalletProviderStatus.NOT_AVAILABLE &&
-                    walletProviderStatus.ios ===
-                        WalletProviderStatus.NOT_AVAILABLE
-                ) {
-                    this.setState({ step: 'install' });
-                }
-                if (
-                    window &&
-                    window.bitcoinAbc &&
-                    window.bitcoinAbc === 'cashtab'
-                ) {
-                    //console.log('CashTab is here');
                     this.setState({ step: 'fresh' });
                 }
+                else {
+                    this.setState({ step: 'install' });
+                }                
             }
         }
 

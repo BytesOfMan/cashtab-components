@@ -2,6 +2,7 @@ import mainLogo from '../../images/12-bitcoin-cash-square-crop.svg';
 import tokenLogo from '../../images/simple-ledger-protocol-logo.png';
 
 const Ticker = {
+    installLink: 'https://chrome.google.com/webstore/detail/cashtab/obldfcmebhllhjlhjbnghaipekcppeag',
     coinName: 'Bitcoin ABC',
     coinDecimals: 8,
     coinSymbol: 'BCHA',
