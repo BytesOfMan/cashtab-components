@@ -1,5 +1,3 @@
-// @flow
-
 import * as React from 'react';
 import styled, { css, keyframes } from 'styled-components';
 
@@ -211,17 +209,17 @@ class ButtonQR extends React.PureComponent<Props> {
 
                         {isLogin && (
                             <LoginCover>
-                                <Text>Login to Badger</Text>
+                                <Text>Login to CashTab</Text>
                             </LoginCover>
                         )}
                         {isInstall && (
                             <WarningCover>
                                 <Text>
                                     <A
-                                        href="https://badger.bitcoin.com"
+                                        href="https://cashtabapp.com"
                                         target="_blank"
                                     >
-                                        Install Badger & refresh
+                                        Install CashTab & refresh
                                     </A>
                                 </Text>
                             </WarningCover>

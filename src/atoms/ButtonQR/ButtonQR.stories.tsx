@@ -8,7 +8,7 @@ import { select, text, boolean, number } from '@storybook/addon-knobs';
 import ButtonQR from './ButtonQR';
 import Text from '../Text';
 
-const ButtonText = 'Badger Pay';
+const ButtonText = 'CashTab Pay';
 const props = {
     toAddress: 'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
     amountSatoshis: 550,

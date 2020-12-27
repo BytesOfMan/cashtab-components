@@ -1,8 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-import BitcoinCashImage from '../../images/bitcoin-cash.svg';
-import SLPLogoImage from '../../images/slp-logo.png';
+import Ticker from '../../atoms/Ticker/'
 
 import type { ValidCoinTypes } from '../../hoc/BadgerBase';
 
@@ -50,7 +49,7 @@ class PriceDisplay extends React.PureComponent<Props> {
     render() {
         const { price, name, coinType, symbol, preSymbol } = this.props;
 
-        const CoinImage = coinType === 'BCH' ? BitcoinCashImage : SLPLogoImage;
+        const CoinImage = coinType === Ticker.coinSymbol ? Ticker.logo : Ticker.tokenLogo;
 
         const preContent = preSymbol ? (
             <PriceText>{preSymbol}</PriceText>

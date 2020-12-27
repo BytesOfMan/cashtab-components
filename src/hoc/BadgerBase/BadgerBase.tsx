@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import debounce from 'lodash/debounce';
+import BigNumber from 'bignumber.js';
 
 import {
     fiatToSatoshis,
@@ -10,17 +11,32 @@ import {
     getTokenInfo,
 } from '../../utils/badger-helpers';
 
+import Ticker from '../../atoms/Ticker/'
+
 import bitcoincomLink from 'bitcoincom-link';
 
 import type { CurrencyCode } from '../../utils/currency-helpers';
 // Note: seems like there is a type bug in bitcoincomLink
 // Even if not, you are not using it here, so no worries
 const {
-    constants,
-    getWalletProviderStatus,
     sendAssets,
     payInvoice,
 } = bitcoincomLink;
+
+const getCashTabProviderStatus = () => {
+    console.log(`getCashTabProviderStatus`)
+    console.log(window.bitcoinAbc)
+    if (
+                    window &&
+                    window.bitcoinAbc &&
+                    window.bitcoinAbc === 'cashtab'
+    ) {
+        return true;
+    }
+    return false;
+        
+
+}
 
 declare global {
     interface Window {
@@ -36,17 +52,14 @@ interface sendParamsArr {
     opReturn?: string[];
 }
 
-const { WalletProviderStatus } = constants;
-
 const SECOND = 1000;
 
 const PRICE_UPDATE_INTERVAL = 60 * SECOND;
-const INTERVAL_LOGIN = 1 * SECOND;
 const REPEAT_TIMEOUT = 4 * SECOND;
 const URI_CHECK_INTERVAL = 10 * SECOND;
 
 // Whitelist of valid coinType.
-type ValidCoinTypes = 'BCH' | 'SLP';
+type ValidCoinTypes = string;
 
 // TODO - Login/Install are badger states, others are payment states.  Separate them to be independent
 type ButtonStates =
@@ -122,7 +135,7 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
     return class extends React.Component<BadgerBaseProps, IState> {
         static defaultProps = {
             currency: 'USD',
-            coinType: 'BCH',
+            coinType: Ticker.coinSymbol,
 
             isRepeatable: false,
             watchAddress: false,
@@ -208,6 +221,7 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
         handleClick = () => {
             const {
                 amount,
+                price,
                 to,
                 successFn,
                 failFn,
@@ -217,25 +231,6 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
                 paymentRequestUrl,
             } = this.props;
 
-            if (
-                window &&
-                window.bitcoinAbc &&
-                window.bitcoinAbc === 'cashtab'
-            ) {
-                console.log(`Cash tab present, dispatching msg`);
-                return window.postMessage(
-                    {
-                        type: 'FROM_PAGE',
-                        text: 'CashTab',
-                        txInfo: {
-                            address: to,
-                            value: 0.05,
-                        },
-                    },
-                    '*',
-                );
-            }
-
             const { satoshis } = this.state;
 
             // Satoshis might not set be set during server rendering
@@ -243,29 +238,48 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
                 return;
             }
 
-            const walletProviderStatus = getWalletProviderStatus();
+            if (
+                window &&
+                window.bitcoinAbc &&
+                window.bitcoinAbc === 'cashtab'
+            ) {
+                console.log(`Cash tab present, dispatching msg`);
+                console.log(`Amount here is`, amount)
+                console.log(`price here is`, price)
+                console.log(`satoshis here`, satoshis)
+                return window.postMessage(
+                    {
+                        type: 'FROM_PAGE',
+                        text: 'CashTab',
+                        txInfo: {
+                            address: to,
+                            value: typeof satoshis !== 'undefined' ? satoshis/1e8 : 0,
+                        },
+                    },
+                    '*',
+                );
+            }
+
+            
+
+            const walletProviderStatus = getCashTabProviderStatus();            
 
             if (
                 typeof window === `undefined` ||
-                (walletProviderStatus.badger ===
-                    WalletProviderStatus.NOT_AVAILABLE &&
-                    walletProviderStatus.android ===
-                        WalletProviderStatus.NOT_AVAILABLE &&
-                    walletProviderStatus.ios ===
-                        WalletProviderStatus.NOT_AVAILABLE)
+                (!walletProviderStatus)
             ) {
                 this.setState({ step: 'install' });
 
                 if (typeof window !== 'undefined') {
-                    window.open('https://badger.bitcoin.com');
+                    window.open(Ticker.installLink);
                 }
                 return;
             }
-
+            
             if (
-                walletProviderStatus.badger === WalletProviderStatus.AVAILABLE
+                walletProviderStatus
             ) {
-                this.setState({ step: 'login' });
+                this.setState({ step: 'fresh' });
                 return;
             }
 
@@ -291,7 +305,7 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
                 protocol: coinType,
                 value: amount?.toString() || adjustAmount(satoshis, 8, true),
             };
-            if (coinType === 'SLP') {
+            if (coinType === Ticker.tokenTicker) {
                 sendParams.assetId = tokenId;
             }
 
@@ -315,26 +329,9 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
         };
 
         gotoLoginState = () => {
-            // Setup login state, and check if the user is logged in every second
-            this.setState({ step: 'login' });
-            if (typeof window !== 'undefined') {
-                const intervalLogin = setInterval(() => {
-                    const walletProviderStatus = getWalletProviderStatus();
-                    if (
-                        walletProviderStatus.badger ===
-                            WalletProviderStatus.LOGGED_IN ||
-                        walletProviderStatus.android ===
-                            WalletProviderStatus.AVAILABLE ||
-                        walletProviderStatus.ios ===
-                            WalletProviderStatus.AVAILABLE
-                    ) {
-                        clearInterval(intervalLogin);
-                        this.setState({ step: 'fresh' });
-                    }
-                }, INTERVAL_LOGIN);
-
-                this.setState({ intervalLogin });
-            }
+            // Obsolete for CashTab
+            // For now, set to 'install'
+            this.setState({ step: 'install' });            
         };
 
         updateSatoshisFiat = debounce(
@@ -370,7 +367,7 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
                 if (
                     !invoiceInfo ||
                     !invoiceInfo.fiatTotal ||
-                    invoiceInfo.currency !== 'BCH'
+                    invoiceInfo.currency !== Ticker.coinSymbol
                 )
                     return;
                 const invoicePriceBCH = invoiceInfo.fiatTotal;
@@ -502,7 +499,7 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
             if (
                 invoiceInfo !== {} &&
                 invoiceInfo.currency &&
-                invoiceInfo.currency !== 'BCH' &&
+                invoiceInfo.currency !== Ticker.coinSymbol &&
                 invoiceInfo.outputs &&
                 invoiceInfo.outputs[0] &&
                 invoiceInfo.outputs[0].token_id
@@ -518,15 +515,15 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
                     coinName: name,
                 });
             } else if (
-                (!paymentRequestUrl && coinType === 'BCH') ||
-                (invoiceInfo !== null && invoiceInfo.currency === 'BCH')
+                (!paymentRequestUrl && coinType === Ticker.coinSymbol) ||
+                (invoiceInfo !== null && invoiceInfo.currency === Ticker.coinSymbol)
             ) {
                 this.setState({
-                    coinSymbol: 'BCH',
-                    coinDecimals: 8,
-                    coinName: 'Bitcoin Cash',
+                    coinSymbol: Ticker.coinSymbol,
+                    coinDecimals: Ticker.coinDecimals,
+                    coinName: Ticker.coinName,
                 });
-            } else if (!paymentRequestUrl && coinType === 'SLP' && tokenId) {
+            } else if (!paymentRequestUrl && coinType === Ticker.tokenTicker && tokenId) {
                 this.setState({
                     coinSymbol: undefined,
                     coinName: undefined,
@@ -543,6 +540,14 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
             }
         };
 
+        confirmCashTabProviderStatus = () => {
+            console.log(`confirmCashTabProviderStatus called`)
+            const cashTabStatus = getCashTabProviderStatus()
+            if (cashTabStatus) {
+                this.setState({ step: 'fresh' });
+            }
+        }
+
         async componentDidMount() {
             if (typeof window !== 'undefined') {
                 const { price, watchAddress, paymentRequestUrl } = this.props;
@@ -553,32 +558,26 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
                 price && this.setupSatoshisFiat();
                 !paymentRequestUrl && this.setupCoinMeta(); // normal call for setupCoinMeta()
 
-                // Detect Badger and determine if button should show login or install CTA
-                const walletProviderStatus = getWalletProviderStatus();
+                // Detect CashTab and determine if button should show CTA
+                console.log(`window`, window)
+                console.log(`window.bitcoinAbc`, window.bitcoinAbc)
+                const cashTabProviderStatus = getCashTabProviderStatus();
+                console.log(`cashtabProviderStatus`, cashTabProviderStatus)                
+                
+                // Occasionially the cashtab window object is not available on componentDidMount, check later
+                // TODO make this less hacky
+                setTimeout(this.confirmCashTabProviderStatus, 750);
+
+                // Detect CashTab and determine if button should show install CTA
+                const walletProviderStatus = getCashTabProviderStatus();
                 if (
-                    walletProviderStatus.badger ===
-                    WalletProviderStatus.AVAILABLE
+                    walletProviderStatus
                 ) {
-                    this.gotoLoginState();
-                }
-                if (
-                    walletProviderStatus.badger ===
-                        WalletProviderStatus.NOT_AVAILABLE &&
-                    walletProviderStatus.android ===
-                        WalletProviderStatus.NOT_AVAILABLE &&
-                    walletProviderStatus.ios ===
-                        WalletProviderStatus.NOT_AVAILABLE
-                ) {
-                    this.setState({ step: 'install' });
-                }
-                if (
-                    window &&
-                    window.bitcoinAbc &&
-                    window.bitcoinAbc === 'cashtab'
-                ) {
-                    console.log('CashTab is here');
                     this.setState({ step: 'fresh' });
                 }
+                else {
+                    this.setState({ step: 'install' });
+                }                
             }
         }
 
@@ -699,7 +698,7 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
             if (
                 paymentRequestUrl &&
                 invoiceInfo &&
-                invoiceInfo.currency === 'BCH'
+                invoiceInfo.currency === Ticker.coinSymbol
             ) {
                 calculatedAmount =
                     adjustAmount(invoiceInfo.fiatTotal, coinDecimals, false) ||
@@ -707,22 +706,27 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
             } else if (
                 paymentRequestUrl &&
                 invoiceInfo &&
-                invoiceInfo.currency === 'SLP' &&
+                invoiceInfo.currency === Ticker.tokenTicker &&
                 invoiceInfo.outputs &&
                 invoiceInfo.outputs[0]
             ) {
                 // Sum up the SLP amounts from invoiceInfo.outputs[0].send_amounts
                 const amounts = invoiceInfo.outputs[0].send_amounts;
-                calculatedAmount = '0';
+
+                let calculatedAmountBig = new BigNumber(0);
                 for (let i = 0; i < amounts.length; i++) {
-                    calculatedAmount += amounts[i];
+                    const thisAmount = new BigNumber(amounts[i])
+                    
+                    calculatedAmountBig = calculatedAmountBig.plus(thisAmount)
+                    
                 }
+                calculatedAmount = calculatedAmountBig.toString()
             }
 
             // Only show QR if all requested features can be encoded in the BIP44 URI, or if it's a BIP70 invoice
             const shouldShowQR =
                 (showQR &&
-                    coinType === 'BCH' &&
+                    coinType === Ticker.coinSymbol &&
                     (!opReturn || !opReturn.length)) ||
                 paymentRequestUrl;
 
@@ -730,14 +734,14 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
             let determinedCoinType = coinType;
             if (
                 paymentRequestUrl &&
-                coinSymbol !== 'BCH' &&
+                coinSymbol !== Ticker.coinSymbol &&
                 coinSymbol !== null
             ) {
-                determinedCoinType = 'SLP';
+                determinedCoinType = Ticker.tokenTicker;
             }
-            if (paymentRequestUrl && coinSymbol === 'BCH') {
-                determinedCoinType = 'BCH';
-            }
+            if (paymentRequestUrl && coinSymbol === Ticker.coinSymbol) {
+                determinedCoinType = Ticker.coinSymbol;
+            }            
 
             return (
                 <Wrapped
