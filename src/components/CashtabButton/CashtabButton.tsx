@@ -5,18 +5,17 @@ import {
     getCurrencyPreSymbol,
     formatPriceDisplay,
     formatAmount,
-} from '../../utils/badger-helpers';
+} from '../../utils/cashtab-helpers';
 
 
 import colors from '../../styles/colors';
 
-import BadgerBase from '../../hoc/BadgerBase';
+import CashtabBase from '../../hoc/CashtabBase';
 
 import type {
     ButtonStates,
-    BadgerBaseProps,
-    ValidCoinTypes,
-} from '../../hoc/BadgerBase';
+    CashtabBaseProps,
+} from '../../hoc/CashtabBase';
 
 import PriceDisplay from '../PriceDisplay';
 import InvoiceTimer from '../InvoiceTimer';
@@ -77,8 +76,8 @@ interface invoiceInfoObj {
     outputs?: Array<invoiceInfoOutputsObjs>;
 }
 
-// Badger Button Props
-type Props = BadgerBaseProps & {
+// Cashtab Button Props
+type Props = CashtabBaseProps & {
     text?: string;
 
     showAmount?: boolean;
@@ -97,7 +96,7 @@ type Props = BadgerBaseProps & {
     step: ButtonStates;
 };
 
-class BadgerButton extends React.PureComponent<Props> {
+class CashtabButton extends React.PureComponent<Props> {
     static defaultProps = {
         showAmount: true,
         showBorder: false,
@@ -133,7 +132,7 @@ class BadgerButton extends React.PureComponent<Props> {
         // buttonPriceDisplay -- handle different cases for BIP70 invoices
 
         // buttonPriceDisplay if no price, or if a bip70 invoice is set from a server without supported websocket updates
-        let buttonPriceDisplay = <Text>Badger Pay</Text>;
+        let buttonPriceDisplay = <Text>Cashtab Pay</Text>;
 
         // buttonPriceDisplay of price set in props and no invoice is set
         if (price && !paymentRequestUrl) {
@@ -204,4 +203,4 @@ class BadgerButton extends React.PureComponent<Props> {
     }
 }
 
-export default BadgerBase(BadgerButton);
+export default CashtabBase(CashtabButton);

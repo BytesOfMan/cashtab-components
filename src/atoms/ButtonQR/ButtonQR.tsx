@@ -3,7 +3,7 @@ import styled, { css, keyframes } from 'styled-components';
 
 import QRCode from 'qrcode.react';
 
-import type { ButtonStates } from '../../hoc/BadgerBase';
+import type { ButtonStates } from '../../hoc/CashtabBase';
 import colors from '../../styles/colors';
 
 import CheckSVG from '../../images/CheckSVG';

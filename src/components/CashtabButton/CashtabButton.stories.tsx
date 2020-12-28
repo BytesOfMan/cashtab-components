@@ -5,7 +5,7 @@ import  Ticker from '../../atoms/Ticker/'
 import { storiesOf } from '@storybook/react/dist/client/preview';
 import { array, select, text, boolean, number } from '@storybook/addon-knobs';
 
-import BadgerButton from './BadgerButton';
+import CashtabButton from './CashtabButton';
 import { currencyOptions } from '../../utils/currency-helpers';
 
 const defaultOpReturn = [
@@ -21,11 +21,11 @@ const tokenIdOptions = [
     '259908ae44f46ef585edef4bcc1e50dc06e4c391ac4be929fae27235b8158cf1',
 ];
 
-storiesOf('BadgerButton', module)
+storiesOf('CashtabButton', module)
     .add(
         'default',
         () => (
-            <BadgerButton
+            <CashtabButton
                 price={number('Price', 0.05)}
                 currency={select('Currency', currencyOptions, 'USD')}
                 to={text(
@@ -39,13 +39,13 @@ storiesOf('BadgerButton', module)
         ),
         {
             notes:
-                'Basic Badger Button.  Perfect for adding Badger integration to an existing flow, or in a minimal way.  Default has all the knobs to play with',
+                'Basic Cashtab Button.  Perfect for adding Cashtab integration to an existing flow, or in a minimal way.  Default has all the knobs to play with',
         },
     )
     .add(
         'most knobs',
         () => (
-            <BadgerButton
+            <CashtabButton
                 price={number('Price', 0.0025)}
                 currency={select('Currency', currencyOptions, 'USD')}
                 to={text(
@@ -57,7 +57,7 @@ storiesOf('BadgerButton', module)
                 opReturn={array('OP_RETURN', defaultOpReturn)}
                 successFn={() => console.log('success example function called')}
                 failFn={() => console.log('fail example function called')}
-                text={text('Top Text', 'Badger Pay')}
+                text={text('Top Text', 'Cashtab Pay')}
                 showAmount={boolean('Toggle coin amount', true)}
                 showBorder={boolean('Toggle Border', true)}
                 showQR={boolean('Show QR', false)}
@@ -65,13 +65,13 @@ storiesOf('BadgerButton', module)
         ),
         {
             notes:
-                'Play with all the props in the knobs tab to try out what BadgerButtons can do',
+                'Play with all the props in the knobs tab to try out what CashtabButtons can do',
         },
     )
     .add(
         'minimal look',
         () => (
-            <BadgerButton
+            <CashtabButton
                 amount={0.0001}
                 to={text(
                     'To Address',
@@ -88,10 +88,10 @@ storiesOf('BadgerButton', module)
     .add(
         'price in fiat',
         () => (
-            <BadgerButton
+            <CashtabButton
                 price={number('Price', 0.0025)}
                 currency={select('Currency', currencyOptions, 'USD')}
-                text="Pay with Badger"
+                text="Pay with Cashtab"
                 to={text(
                     'To Address',
                     'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
@@ -106,7 +106,7 @@ storiesOf('BadgerButton', module)
     .add(
         `price in ${Ticker.coinSymbol}`,
         () => (
-            <BadgerButton
+            <CashtabButton
                 coinType={Ticker.coinSymbol}
                 amount={number('Amount', 0.0001)}
                 to={text(
@@ -122,7 +122,7 @@ storiesOf('BadgerButton', module)
     .add(
         `price in ${Ticker.tokenTicker} tokens`,
         () => (
-            <BadgerButton
+            <CashtabButton
                 to={text(
                     'To Address',
                     'simpleledger:qq6qcjt6xlkeqzdwkhdvfyl2q2d2wafkgg8phzcqez',
@@ -143,7 +143,7 @@ storiesOf('BadgerButton', module)
     .add(
         'optional text',
         () => (
-            <BadgerButton
+            <CashtabButton
                 price={0.0025}
                 currency={'USD'}
                 to={text(
@@ -162,7 +162,7 @@ storiesOf('BadgerButton', module)
     .add(
         'optional QR code',
         () => (
-            <BadgerButton
+            <CashtabButton
                 amount={0.0001}
                 showQR={boolean('show QR', true)}
                 to={text(
@@ -180,7 +180,7 @@ storiesOf('BadgerButton', module)
     .add(
         'toggle coin amount',
         () => (
-            <BadgerButton
+            <CashtabButton
                 showAmount={boolean('Toggle coin amount', false)}
                 price={0.0025}
                 currency={'USD'}
@@ -198,7 +198,7 @@ storiesOf('BadgerButton', module)
     .add(
         'toggle border',
         () => (
-            <BadgerButton
+            <CashtabButton
                 price={0.0025}
                 showBorder={boolean('Toggle Border', true)}
                 currency={'USD'}
@@ -215,7 +215,7 @@ storiesOf('BadgerButton', module)
     .add(
         'OP_RETURN',
         () => (
-            <BadgerButton
+            <CashtabButton
                 price={0.0025}
                 currency={'USD'}
                 opReturn={array('OP_RETURN', defaultOpReturn)}
@@ -233,7 +233,7 @@ storiesOf('BadgerButton', module)
     .add(
         'repeatable payments',
         () => (
-            <BadgerButton
+            <CashtabButton
                 amount={0.0001}
                 to={text(
                     'To Address',
@@ -251,7 +251,7 @@ storiesOf('BadgerButton', module)
     .add(
         'watch all sources',
         () => (
-            <BadgerButton
+            <CashtabButton
                 amount={0.0001}
                 to={text(
                     'To Address',
@@ -268,7 +268,7 @@ storiesOf('BadgerButton', module)
     .add(
         'controlled step',
         () => (
-            <BadgerButton
+            <CashtabButton
                 amount={0.0001}
                 to={text(
                     'To Address',
@@ -289,7 +289,7 @@ storiesOf('BadgerButton', module)
     .add(
         `BIP70 Invoicing - ${Ticker.coinSymbol}, expired`,
         () => (
-            <BadgerButton
+            <CashtabButton
                 paymentRequestUrl={text(
                     'Invoice URL',
                     //'https://yourInvoiceUrlHere.com/String'
@@ -311,7 +311,7 @@ storiesOf('BadgerButton', module)
     .add(
         `BIP70 Invoicing - ${Ticker.tokenTicker}, Paid`,
         () => (
-            <BadgerButton
+            <CashtabButton
                 paymentRequestUrl={text(
                     'Invoice URL',
                     //'https://yourInvoiceUrlHere.com/String'

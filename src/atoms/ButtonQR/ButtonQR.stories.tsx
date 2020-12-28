@@ -1,5 +1,3 @@
-// @flow
-
 import React from 'react';
 
 import { storiesOf } from '@storybook/react/dist/client/preview';
@@ -32,7 +30,7 @@ storiesOf('ButtonQR', module)
         ),
         {
             notes:
-                'Button is a stateful controlled component which is the primary visual indicator for the badger payment process',
+                'Button is a stateful controlled component which is the primary visual indicator for the Cashtab payment process',
         },
     )
     .add(
@@ -50,7 +48,7 @@ storiesOf('ButtonQR', module)
             </ButtonQR>
         ),
         {
-            notes: 'Awaiting a confirmation or cancellation of Badger popup',
+            notes: 'Awaiting a confirmation or cancellation of Cashtab popup',
         },
     )
     .add(
@@ -104,7 +102,7 @@ storiesOf('ButtonQR', module)
             </ButtonQR>
         ),
         {
-            notes: 'Badger plugin not installed, prompt user to install Badger',
+            notes: 'Cashtab plugin not installed, prompt user to install Cashtab',
         },
     )
     .add(

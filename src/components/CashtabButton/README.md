@@ -1,13 +1,13 @@
-# BadgerButton
+# CashtabButton
 
-Renders a basic BadgerButton to integrate with the Badger wallet.  
+Renders a basic CashtabButton to integrate with the Cashtab wallet.  
 This basic button is ideal for a minimal payment/donation, or if your application wants to control the majority of the payment layout.
 
 ## Example Usage
 
 ```jsx
 import React from 'react';
-import { BadgerButton } from 'badger-components-react';
+import { CashtabButton } from 'cashtab-components-react';
 
 class MyClass extends React.PureComponent {
     render() {
@@ -19,14 +19,14 @@ class MyClass extends React.PureComponent {
 
         return (
             <section>
-                <BadgerButton
+                <CashtabButton
                     to={paymentAddress}
                     price={price}
                     currency={currency}
                     successFn={tx => console.log(tx)}
                     failFn={err => console.log(err)}
                     text="Donate with BCH"
-                    opReturn={['0x6d02', 'Hello BadgerButton']}
+                    opReturn={['0x6d02', 'Hello CashtabButton']}
                     showBorder={false}
                     showAmount={true}
                     showQR={false}
@@ -44,13 +44,13 @@ class MyClass extends React.PureComponent {
 
 ```jsx
 import React from 'react';
-import { BadgerButton } from 'badger-components-react';
+import { CashtabButton } from 'badger-components-react';
 
 class MyClass extends React.PureComponent {
     render() {
         return (
             <section>
-                <BadgerButton
+                <CashtabButton
                     paymentRequestUrl={'https://yourPaymentRequestUrl/'}
                     successFn={tx => console.log(tx)}
                     failFn={err => console.log(err)}

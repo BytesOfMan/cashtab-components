@@ -6,13 +6,13 @@ import  Ticker from '../../atoms/Ticker/'
 import { storiesOf } from '@storybook/react/dist/client/preview';
 import { array, boolean, number, select, text } from '@storybook/addon-knobs';
 
-import BadgerBadge from './BadgerBadge';
+import CashtabBadge from './CashtabBadge';
 
 import { currencyOptions } from '../../utils/currency-helpers';
 
 const defaultOpReturn = [
     '0x6d02',
-    'Try out Badger at https://badger.bitcoin.com',
+    'Try out Cashtab at https://cashtabapp.com/',
 ];
 
 // [ SPICE, NAKAMOTO, DOGECASH, BROC ]
@@ -23,11 +23,11 @@ const tokenIdOptions = [
     '259908ae44f46ef585edef4bcc1e50dc06e4c391ac4be929fae27235b8158cf1',
 ];
 
-storiesOf('BadgerBadge', module)
+storiesOf('CashtabBadge', module)
     .add(
         'most knobs',
         () => (
-            <BadgerBadge
+            <CashtabBadge
                 price={number('Price', 0.0025)}
                 currency={select('Currency', currencyOptions, 'USD')}
                 to={text(
@@ -50,13 +50,13 @@ storiesOf('BadgerBadge', module)
         ),
         {
             notes:
-                'Badger Badges are perfect for showing the price and amount in a simple clean all in one component.  Default has knobs to experiment with all settings',
+                'Cashtab Badges are perfect for showing the price and amount in a simple clean all in one component.  Default has knobs to experiment with all settings',
         },
     )
     .add(
         'minimal look',
         () => (
-            <BadgerBadge
+            <CashtabBadge
                 amount={0.0001}
                 to={text(
                     'To Address',
@@ -74,7 +74,7 @@ storiesOf('BadgerBadge', module)
     .add(
         'price in fiat',
         () => (
-            <BadgerBadge
+            <CashtabBadge
                 price={number('Price', 0.0025)}
                 currency={select('Currency', currencyOptions, 'USD')}
                 to={text(
@@ -93,7 +93,7 @@ storiesOf('BadgerBadge', module)
     .add(
         `price in ${Ticker.coinSymbol}`,
         () => (
-            <BadgerBadge
+            <CashtabBadge
                 coinType={Ticker.coinSymbol}
                 amount={number('Amount', 0.0001)}
                 to={text(
@@ -109,7 +109,7 @@ storiesOf('BadgerBadge', module)
     .add(
         `price in ${Ticker.tokenTicker} tokens`,
         () => (
-            <BadgerBadge
+            <CashtabBadge
                 to={text(
                     'To Address',
                     'simpleledger:qq6qcjt6xlkeqzdwkhdvfyl2q2d2wafkgg8phzcqez',
@@ -131,7 +131,7 @@ storiesOf('BadgerBadge', module)
     .add(
         'custom text',
         () => (
-            <BadgerBadge
+            <CashtabBadge
                 price={0.0025}
                 currency={'USD'}
                 to={text(
@@ -151,7 +151,7 @@ storiesOf('BadgerBadge', module)
     .add(
         'toggle QR code',
         () => (
-            <BadgerBadge
+            <CashtabBadge
                 price={number('Price', 0.0025)}
                 to={text(
                     'To Address',
@@ -170,7 +170,7 @@ storiesOf('BadgerBadge', module)
     .add(
         'toggle coin amount',
         () => (
-            <BadgerBadge
+            <CashtabBadge
                 price={0.0025}
                 to={text(
                     'To Address',
@@ -186,27 +186,27 @@ storiesOf('BadgerBadge', module)
         },
     )
     .add(
-        'toggle badger info',
+        'toggle Cashtab info',
         () => (
-            <BadgerBadge
+            <CashtabBadge
                 price={0.0025}
                 to={text(
                     'To Address',
                     'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
                 )}
-                showBrand={boolean('Badger info', true)}
+                showBrand={boolean('Cashtab info', true)}
                 successFn={() => console.log('success')}
                 failFn={() => console.log('fail')}
             />
         ),
         {
-            notes: 'Choose to display a link to the Badger homepage',
+            notes: 'Choose to display a link to the Cashtab homepage',
         },
     )
     .add(
         'toggle border',
         () => (
-            <BadgerBadge
+            <CashtabBadge
                 price={0.0025}
                 showBorder={boolean('Toggle Border', true)}
                 to={text(
@@ -222,7 +222,7 @@ storiesOf('BadgerBadge', module)
     .add(
         'repeatable payments',
         () => (
-            <BadgerBadge
+            <CashtabBadge
                 price={number('Price', 0.0025)}
                 to={text(
                     'To Address',
@@ -240,7 +240,7 @@ storiesOf('BadgerBadge', module)
     .add(
         'payment functions',
         () => (
-            <BadgerBadge
+            <CashtabBadge
                 price={0.0025}
                 to={text(
                     'To Address',
@@ -257,7 +257,7 @@ storiesOf('BadgerBadge', module)
     .add(
         'OP_RETURN',
         () => (
-            <BadgerBadge
+            <CashtabBadge
                 price={0.0025}
                 currency={'USD'}
                 opReturn={array('OP_RETURN', defaultOpReturn)}
@@ -269,13 +269,13 @@ storiesOf('BadgerBadge', module)
             />
         ),
         {
-            notes: 'Modify the OP_RETURN value when paid with Badger wallet',
+            notes: 'Modify the OP_RETURN value when paid with Cashtab wallet',
         },
     )
     .add(
         'watch all sources',
         () => (
-            <BadgerBadge
+            <CashtabBadge
                 amount={0.0001}
                 to={text(
                     'To Address',
@@ -292,7 +292,7 @@ storiesOf('BadgerBadge', module)
     .add(
         'controlled step',
         () => (
-            <BadgerBadge
+            <CashtabBadge
                 amount={0.0001}
                 to={text(
                     'To Address',
@@ -313,7 +313,7 @@ storiesOf('BadgerBadge', module)
     .add(
         `BIP70 Invoicing - ${Ticker.coinSymbol}, expired`,
         () => (
-            <BadgerBadge
+            <CashtabBadge
                 paymentRequestUrl={text(
                     'Invoice URL',
                     //'https://yourInvoiceUrlHere.com/String'
@@ -335,7 +335,7 @@ storiesOf('BadgerBadge', module)
     .add(
         `BIP70 Invoicing - ${Ticker.tokenTicker}, Paid`,
         () => (
-            <BadgerBadge
+            <CashtabBadge
                 paymentRequestUrl={text(
                     'Invoice URL',
                     //'https://yourInvoiceUrlHere.com/String'

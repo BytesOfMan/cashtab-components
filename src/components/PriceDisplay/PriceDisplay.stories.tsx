@@ -1,9 +1,9 @@
-// @flow
-
 import React from 'react';
 
+import Ticker from '../../atoms/Ticker'
+
 import { storiesOf } from '@storybook/react/dist/client/preview';
-import { array, select, text, boolean, number } from '@storybook/addon-knobs';
+import { select, number } from '@storybook/addon-knobs';
 
 import PriceDisplay from './PriceDisplay';
 import { currencyOptions } from '../../utils/currency-helpers';
@@ -11,16 +11,7 @@ import {
     getCurrencyPreSymbol,
     formatPriceDisplay,
     formatAmount,
-} from '../../utils/badger-helpers';
-
-const coinTypeOptions = ['BCH', 'SLP'];
-
-// [ NAKAMOTO, DOGECASH, BROC ]
-const tokenIdOptions = [
-    'df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb',
-    '3916a24a051f8b3833a7fd128be51dd93015555ed9142d6106ec03267f5cdc4c',
-    '259908ae44f46ef585edef4bcc1e50dc06e4c391ac4be929fae27235b8158cf1',
-];
+} from '../../utils/cashtab-helpers';
 
 storiesOf('Price Display', module)
     .addDecorator(story => (
@@ -52,26 +43,26 @@ storiesOf('Price Display', module)
 
             return (
                 <PriceDisplay
-                    coinType="BCH"
+                    coinType={Ticker.coinSymbol}
                     price={formatAmount(satoshis, 8)}
-                    symbol="BCH"
-                    name="Bitcoin Cash"
+                    symbol={Ticker.coinSymbol}
+                    name={Ticker.coinName}
                 />
             );
         },
         {
-            notes: 'Displaying BCH ',
+            notes: `Displaying ${Ticker.coinSymbol}`,
         },
     )
     .add(
-        'slp',
+        `${Ticker.tokenTicker}`,
         () => {
             const price = number('Price', 0.001);
             const satoshis = price * 1e8;
 
             return (
                 <PriceDisplay
-                    coinType="SLP"
+                    coinType={Ticker.tokenTicker}
                     price={formatAmount(satoshis, 8)}
                     symbol="DOGE"
                     name="DOGECASH"
@@ -79,6 +70,6 @@ storiesOf('Price Display', module)
             );
         },
         {
-            notes: 'Displaying SLP tokens',
+            notes: `Displaying ${Ticker.tokenTicker} tokens`,
         },
     );
