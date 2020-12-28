@@ -9,7 +9,7 @@ const colors = {
     success700: '#007328',
     expired500: '#FFBABA',
     expired700: '#D8000C',
-    bg100: '#000',
+    bg100: '#fff',
 };
 
 export default colors;
