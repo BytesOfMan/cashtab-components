@@ -117,7 +117,30 @@ type Props = CashtabBaseProps & {
     handleClick: Function;
 };
 
-class CashtabBadge extends React.PureComponent<Props> {
+// Cashtab Badge Props
+interface CashtabBadgeProps  {
+    text?: string;
+    tag?: string;
+    step: ButtonStates;
+
+    showAmount?: boolean;
+    coinSymbol: string;
+    coinName: string;
+    coinAmount: number;
+    coinDecimals?: number;
+
+    showBrand?: boolean;
+    showQR?: boolean;
+    showBorder?: boolean;
+
+    invoiceInfo?: invoiceInfoObj;
+    invoiceTimeLeftSeconds?: number;
+    invoiceFiat?: number;
+
+    handleClick: Function;
+};
+
+class CashtabBadge extends React.PureComponent<CashtabBaseProps & CashtabBadgeProps> {
     static defaultProps = {
         currency: 'USD',
         tag: 'CashTab Pay',

@@ -1,5 +1,3 @@
-// @flow
-
 import React from 'react';
 import  Ticker from '../../atoms/Ticker/'
 
@@ -62,7 +60,7 @@ storiesOf('CashtabBadge', module)
                     'To Address',
                     'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
                 )}
-                text={''}
+                text={''} 
                 showAmount={false}
                 showQR={boolean('Toggle QR', true)}
             />

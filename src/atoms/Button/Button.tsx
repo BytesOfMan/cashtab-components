@@ -125,7 +125,7 @@ class Button extends React.PureComponent<Props> {
         const isInstall = step === 'install';
 
         return (
-            <ButtonElement
+            <ButtonElement<any>
                 disabled={!isFresh}
                 isFresh={isFresh}
                 {...this.props}

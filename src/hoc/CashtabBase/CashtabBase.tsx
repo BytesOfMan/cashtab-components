@@ -81,7 +81,7 @@ interface invoiceInfoObj {
     outputs?: Array<invoiceInfoOutputsObjs>;
 }
 
-type CashtabBaseProps = {
+interface CashtabBaseProps  {
     to: string;
     stepControlled?: ButtonStates;
 
