@@ -105,13 +105,6 @@ const ExpiredCover = styled.div`
     background-color: ${colors.expired500};
 `;
 
-const LoginCover = styled.div`
-    ${cover};
-    font-size: 16px;
-    border-color: ${colors.pending700};
-    background-color: ${colors.pending500};
-`;
-
 const WarningCover = styled.div`
     ${cover};
     font-size: 16px;
@@ -170,7 +163,6 @@ class ButtonQR extends React.PureComponent<Props> {
         const isPending = step === 'pending';
         const isComplete = step === 'complete';
         const isExpired = step === 'expired';
-        const isLogin = step === 'login';
         const isInstall = step === 'install';
 
         return (
@@ -206,12 +198,7 @@ class ButtonQR extends React.PureComponent<Props> {
                         {...this.props}
                     >
                         {children}
-
-                        {isLogin && (
-                            <LoginCover>
-                                <Text>Login to CashTab</Text>
-                            </LoginCover>
-                        )}
+                       
                         {isInstall && (
                             <WarningCover>
                                 <Text>

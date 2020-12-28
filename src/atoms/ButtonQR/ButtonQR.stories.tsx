@@ -7,10 +7,6 @@ import ButtonQR from './ButtonQR';
 import Text from '../Text';
 
 const ButtonText = 'CashTab Pay';
-const props = {
-    toAddress: 'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
-    amountSatoshis: 550,
-};
 
 storiesOf('ButtonQR', module)
     .add(
@@ -68,25 +64,7 @@ storiesOf('ButtonQR', module)
         {
             notes: 'Payment received, at least on the front-end',
         },
-    )
-    .add(
-        'login prompt',
-        () => (
-            <ButtonQR
-                toAddress={text(
-                    'To address',
-                    'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
-                )}
-                amountSatoshis={number('Satoshis', 550)}
-                step={'login'}
-            >
-                <Text>{ButtonText}</Text>
-            </ButtonQR>
-        ),
-        {
-            notes: 'user not logged in, prompt to login',
-        },
-    )
+    )    
     .add(
         'install prompt',
         () => (

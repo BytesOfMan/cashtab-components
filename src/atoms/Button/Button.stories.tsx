@@ -43,18 +43,7 @@ storiesOf('Button', module)
         {
             notes: 'Payment received, at least on the front-end',
         },
-    )
-    .add(
-        'login prompt',
-        () => (
-            <Button step={'login'}>
-                <Text>{ButtonText}</Text>
-            </Button>
-        ),
-        {
-            notes: 'user not logged in, prompt to login',
-        },
-    )
+    )    
     .add(
         'install prompt',
         () => (
