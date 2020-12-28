@@ -1,8 +1,6 @@
-// @flow
-
 const colors = {
-    brand500: '#0AC18E',
-    brand700: '#11a87e',
+    brand500: '#F59332',
+    brand700: '#F59332',
     fg100: '#ccc',
     fg500: '#4d4d4d',
     pending500: '#00BFFF',
@@ -11,7 +9,7 @@ const colors = {
     success700: '#007328',
     expired500: '#FFBABA',
     expired700: '#D8000C',
-    bg100: '#ffffff',
+    bg100: '#000',
 };
 
 export default colors;
