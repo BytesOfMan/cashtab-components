@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { storiesOf } from '@storybook/react/dist/client/preview';
-import { select, text, boolean, number } from '@storybook/addon-knobs';
+import { text, number } from '@storybook/addon-knobs';
 
 import ButtonQR from './ButtonQR';
 import Text from '../Text';
@@ -103,23 +103,5 @@ storiesOf('ButtonQR', module)
         ),
         {
             notes: 'Cashtab plugin not installed, prompt user to install Cashtab',
-        },
-    )
-    .add(
-        'expired',
-        () => (
-            <ButtonQR
-                paymentRequestUrl={text(
-                    'Invoice URL',
-                    // expired invoice
-                    'https://pay.bitcoin.com/i/Fz4AaMpzuSde9DgpFwDt13',
-                )}
-                step={'expired'}
-            >
-                <Text>{ButtonText}</Text>
-            </ButtonQR>
-        ),
-        {
-            notes: 'Shown for an expired BIP70 invoice',
         },
     );
