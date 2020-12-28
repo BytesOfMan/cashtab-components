@@ -71,7 +71,7 @@ const A = styled.a`
 `;
 
 // Cashtab Badge Props
-type Props = CashtabBaseProps & {
+type CashtabBadgeProps = CashtabBaseProps & {
     text?: string;
     tag?: string;
     step: ButtonStates;
@@ -89,7 +89,7 @@ type Props = CashtabBaseProps & {
     handleClick: Function;
 };
 
-class CashtabBadge extends React.PureComponent<Props> {
+class CashtabBadge extends React.PureComponent<CashtabBadgeProps> {
     static defaultProps = {
         currency: 'USD',
         tag: 'CashTab Pay',
@@ -186,5 +186,5 @@ class CashtabBadge extends React.PureComponent<Props> {
         );
     }
 }
-
+export type { CashtabBadgeProps };
 export default CashtabBase(CashtabBadge);

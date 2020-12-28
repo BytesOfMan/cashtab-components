@@ -1,17 +1,8 @@
-import React from 'react';
-
-import  Ticker from '../../atoms/Ticker/'
-
-import { storiesOf } from '@storybook/react/dist/client/preview';
-import { array, select, text, boolean, number } from '@storybook/addon-knobs';
-
+import { Meta, Story } from '@storybook/react/types-6-0';
 import CashtabButton from './CashtabButton';
+import type { CashtabButtonProps } from './CashtabButton'
 import { currencyOptions } from '../../utils/currency-helpers';
-
-const defaultOpReturn = [
-    '0x6d02',
-    `Learn to build on ${Ticker.coinSymbol} at https://bitcoinabc.org/`,
-];
+import Ticker from '../../atoms/Ticker'
 
 // [ SPICE, NAKAMOTO, DOGECASH, BROC ]
 const tokenIdOptions = [
@@ -21,269 +12,59 @@ const tokenIdOptions = [
     '259908ae44f46ef585edef4bcc1e50dc06e4c391ac4be929fae27235b8158cf1',
 ];
 
-storiesOf('CashtabButton', module)
-    .add(
-        'default',
-        () => (
-            <CashtabButton
-                price={number('Price', 0.05)}
-                currency={select('Currency', currencyOptions, 'USD')}
-                to={text(
-                    'To Address',
-                    'bitcoincash:qppc593r2hhksvrz5l77n5yd6usrj74waqnqemgjgf',
-                )}
-                opReturn={array('OP_RETURN', [])}
-                successFn={() => console.log('success example function called')}
-                failFn={() => console.log('fail example function called')}
-            />
-        ),
-        {
-            notes:
-                'Basic Cashtab Button.  Perfect for adding Cashtab integration to an existing flow, or in a minimal way.  Default has all the knobs to play with',
-        },
-    )
-    .add(
-        'most knobs',
-        () => (
-            <CashtabButton
-                price={number('Price', 0.0025)}
-                currency={select('Currency', currencyOptions, 'USD')}
-                to={text(
-                    'To Address',
-                    'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
-                )}
-                isRepeatable={boolean('repeatable', true)}
-                repeatTimeout={number('repeat timeout (ms)', 4000)}
-                opReturn={array('OP_RETURN', defaultOpReturn)}
-                successFn={() => console.log('success example function called')}
-                failFn={() => console.log('fail example function called')}
-                text={text('Top Text', 'Cashtab Pay')}
-                showAmount={boolean('Toggle coin amount', true)}
-                showBorder={boolean('Toggle Border', true)}
-                showQR={boolean('Show QR', false)}
-            />
-        ),
-        {
-            notes:
-                'Play with all the props in the knobs tab to try out what CashtabButtons can do',
-        },
-    )
-    .add(
-        'minimal look',
-        () => (
-            <CashtabButton
-                amount={0.0001}
-                to={text(
-                    'To Address',
-                    'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
-                )}
-                showSatoshis={false}
-                showQR={boolean('QR?', true)}
-            />
-        ),
-        {
-            notes: 'minimal look',
-        },
-    )
-    .add(
-        'price in fiat',
-        () => (
-            <CashtabButton
-                price={number('Price', 0.0025)}
-                currency={select('Currency', currencyOptions, 'USD')}
-                text="Pay with Cashtab"
-                to={text(
-                    'To Address',
-                    'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
-                )}
-            />
-        ),
-        {
-            notes:
-                `Change the currency and price to charge in any fiat currency equivalent of ${Ticker.coinSymbol}`,
-        },
-    )
-    .add(
-        `price in ${Ticker.coinSymbol}`,
-        () => (
-            <CashtabButton
-                coinType={Ticker.coinSymbol}
-                amount={number('Amount', 0.0001)}
-                to={text(
-                    'To Address',
-                    'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
-                )}
-            />
-        ),
-        {
-            notes: 'Without a text prop, it only shows the price',
-        },
-    )
-    .add(
-        `price in ${Ticker.tokenTicker} tokens`,
-        () => (
-            <CashtabButton
-                to={text(
-                    'To Address',
-                    'simpleledger:qq6qcjt6xlkeqzdwkhdvfyl2q2d2wafkgg8phzcqez',
-                )}
-                coinType={Ticker.tokenTicker}
-                tokenId={
-                    text('Token ID', '') ||
-                    select('Token ID select', tokenIdOptions, tokenIdOptions[0])
-                }
-                amount={number('Amount', 5)}
-                text={`Send ${Ticker.tokenTicker} tokens`}
-            />
-        ),
-        {
-            notes: `Enter the token ID and send whichever ${Ticker.tokenTicker} tokens you want!`,
-        },
-    )
-    .add(
-        'optional text',
-        () => (
-            <CashtabButton
-                price={0.0025}
-                currency={'USD'}
-                to={text(
-                    'To Address',
-                    'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
-                )}
-                text={text('text', 'Change this text in section below')}
-                successFn={() => console.log('success example function called')}
-                failFn={() => console.log('fail example function called')}
-            />
-        ),
-        {
-            notes: 'Without a text prop, it only shows the price',
-        },
-    )
-    .add(
-        'optional QR code',
-        () => (
-            <CashtabButton
-                amount={0.0001}
-                showQR={boolean('show QR', true)}
-                to={text(
-                    'To Address',
-                    'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
-                )}
-            />
-        ),
-        {
-            notes:
-                'Optional QR code in addition to Button.  Only shows if transaction fully compatible in a URI',
-        },
-    )
+const Template: Story<CashtabButtonProps> = (args: CashtabButtonProps) => <CashtabButton {...args} />;
 
-    .add(
-        'toggle coin amount',
-        () => (
-            <CashtabButton
-                showAmount={boolean('Toggle coin amount', false)}
-                price={0.0025}
-                currency={'USD'}
-                text="Pay now"
-                to={text(
-                    'To Address',
-                    'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
-                )}
-            />
-        ),
-        {
-            notes: 'Choose to show the coin or token amount',
-        },
-    )
-    .add(
-        'toggle border',
-        () => (
-            <CashtabButton
-                price={0.0025}
-                showBorder={boolean('Toggle Border', true)}
-                currency={'USD'}
-                to={text(
-                    'To Address',
-                    'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
-                )}
-            />
-        ),
-        {
-            notes: 'Change the currency and price',
-        },
-    )
-    .add(
-        'OP_RETURN',
-        () => (
-            <CashtabButton
-                price={0.0025}
-                currency={'USD'}
-                opReturn={array('OP_RETURN', defaultOpReturn)}
-                text="With OP_RETURN"
-                to={text(
-                    'To Address',
-                    'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
-                )}
-            />
-        ),
-        {
-            notes: 'Change the currency and price',
-        },
-    )
-    .add(
-        'repeatable payments',
-        () => (
-            <CashtabButton
-                amount={0.0001}
-                to={text(
-                    'To Address',
-                    'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
-                )}
-                isRepeatable={boolean('Repeatable payment', true)}
-                repeatTimeout={number('Reset Timeout (ms)', 5000)}
-            />
-        ),
-        {
-            notes:
-                'Payments which can happen more than once on a single page visit.  Games for example',
-        },
-    )
-    .add(
-        'watch all sources',
-        () => (
-            <CashtabButton
-                amount={0.0001}
-                to={text(
-                    'To Address',
-                    'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
-                )}
-                watchAddress={boolean('Watch Address', true)}
-            />
-        ),
-        {
-            notes:
-                'if watchAddress is true, the payment will turn to confirmed when the address receives a payment from any source.  Including other people.  This is ideal to use if the payment codes are unique for the checkout.  Not great if the payment address is shared by users.',
-        },
-    )
-    .add(
-        'controlled step',
-        () => (
-            <CashtabButton
-                amount={0.0001}
-                to={text(
-                    'To Address',
-                    'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
-                )}
-                stepControlled={select(
-                    'step',
-                    ['fresh', 'pending', 'complete'],
-                    'fresh',
-                )}
-            />
-        ),
-        {
-            notes:
-                'Controlled step overrides the component step state.  Valuable for payment systems where the app/backend does payment confirmation.',
-        },
-    );
-    
+export const Standard = Template.bind({});
+Standard.args = { price: .05, currency: 'USD', to: 'bitcoincash:qrcl220pxeec78vnchwyh6fsdyf60uv9tcynw3u2ev' };
+
+export const MostProps = Template.bind({});
+MostProps.args = { price:.0025, currency:'GBP', to:'bitcoincash:qrcl220pxeec78vnchwyh6fsdyf60uv9tcynw3u2ev', isRepeatable: true, repeatTimeout:4000, text: 'My Cash Button', showAmount: true, showBorder: true, showQR: false };
+
+export const Minimal = Template.bind({});
+Minimal.args = { amount:.01, to:'bitcoincash:qrcl220pxeec78vnchwyh6fsdyf60uv9tcynw3u2ev', showAmount: false, showQR: true };
+
+export const Fiat = Template.bind({});
+Fiat.args = { price:3.50, currency:'CAD', text: 'Pay with Cashtab', to:'bitcoincash:qrcl220pxeec78vnchwyh6fsdyf60uv9tcynw3u2ev' };
+
+Fiat.storyName = 'price in fiat'
+
+export const BCHA = Template.bind({});
+BCHA.args = { coinType: Ticker.coinSymbol, amount:0.33, to:'bitcoincash:qrcl220pxeec78vnchwyh6fsdyf60uv9tcynw3u2ev' };
+
+BCHA.storyName = `price in ${Ticker.coinSymbol}`
+
+export const SLPA = Template.bind({});
+SLPA.args = { coinType: Ticker.tokenTicker, tokenId:tokenIdOptions[0],amount:100, to:'simpleledger:qqvcsnz9x9nu7vq35vmrkjc7hkfxhhs9nuqw7ew08n', showQR: true };
+
+SLPA.storyName = `price in ${Ticker.tokenTicker}`
+
+export const StepControlled = Template.bind({});
+StepControlled.args = { amount:0.012, to:'bitcoincash:qrcl220pxeec78vnchwyh6fsdyf60uv9tcynw3u2ev', stepControlled:'fresh' };
+
+StepControlled.storyName = `Controlled Step`
+
+
+export default {
+  title: 'CashtabButton',
+  component: CashtabButton,
+  argTypes: {
+    currency: {
+      control: {
+        type: 'select',
+        options: currencyOptions,
+      },
+    },
+    tokenId: {
+      control: {
+        type: 'select',
+        options: tokenIdOptions,
+      },
+    },
+    stepControlled: {
+      control: {
+        type: 'select',
+        options: ['fresh', 'pending', 'complete'],
+      },
+    },
+  }
+} as Meta;

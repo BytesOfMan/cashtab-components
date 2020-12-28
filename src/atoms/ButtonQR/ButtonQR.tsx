@@ -18,7 +18,6 @@ type Props = {
     toAddress: string;
     amountSatoshis?: number;
     sizeQR: number;
-    paymentRequestUrl?: string;
     onClick?: Function;
 };
 
@@ -142,7 +141,6 @@ class ButtonQR extends React.PureComponent<Props> {
             toAddress,
             amountSatoshis,
             sizeQR,
-            paymentRequestUrl,
         } = this.props;
 
         const widthQR = sizeQR >= 125 ? sizeQR : 125; // Minimum width 125
@@ -152,11 +150,7 @@ class ButtonQR extends React.PureComponent<Props> {
 
         let uri = amountSatoshis
             ? `${uriBase}?amount=${amountSatoshis / 1e8}`
-            : uriBase;
-
-        if (paymentRequestUrl && paymentRequestUrl.length > 0) {
-            uri = `bitcoincash:?r=${paymentRequestUrl}`;
-        } else uri = `bitcoincash:?r=https://pleaseEnterBip70Url/`;
+            : uriBase;        
 
         // State booleans
         const isFresh = step === 'fresh';
