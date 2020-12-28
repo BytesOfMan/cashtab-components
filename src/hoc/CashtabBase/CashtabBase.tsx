@@ -61,13 +61,12 @@ const URI_CHECK_INTERVAL = 10 * SECOND;
 // Whitelist of valid coinType.
 type ValidCoinTypes = string;
 
-// TODO - Login/Install are Cashtab (login to be removed) states, others are payment states.  Separate them to be independent
+// TODO - Install is a Cashtab state, others are payment states.  Separate them to be independent
 type ButtonStates =
     | 'fresh'
     | 'pending'
     | 'complete'
     | 'expired'
-    | 'login'
     | 'install';
 
 interface invoiceInfoOutputsObjs {
@@ -124,7 +123,6 @@ interface IState {
 
     intervalPrice?: NodeJS.Timeout;
     intervalInvoicePrice?: NodeJS.Timeout;
-    intervalLogin?: NodeJS.Timeout;
     intervalUnconfirmed?: NodeJS.Timeout;
     intervalTimer?: NodeJS.Timeout;
 
@@ -158,7 +156,6 @@ const CashtabBase = (Wrapped: React.ComponentType<any>) => {
 
             intervalPrice: undefined,
             intervalInvoicePrice: undefined,
-            intervalLogin: undefined,
             intervalUnconfirmed: undefined,
             intervalTimer: undefined,
             errors: [],
@@ -325,12 +322,6 @@ const CashtabBase = (Wrapped: React.ComponentType<any>) => {
                     failFn && failFn(err);
                     this.setState({ step: 'fresh' });
                 });
-        };
-
-        gotoLoginState = () => {
-            // Obsolete for CashTab
-            // For now, set to 'install'
-            this.setState({ step: 'install' });            
         };
 
         updateSatoshisFiat = debounce(
@@ -584,14 +575,12 @@ const CashtabBase = (Wrapped: React.ComponentType<any>) => {
             const {
                 intervalPrice,
                 intervalInvoicePrice,
-                intervalLogin,
                 intervalUnconfirmed,
                 websocketInvoice,
                 intervalTimer,
             } = this.state;
             intervalPrice && clearInterval(intervalPrice);
             intervalInvoicePrice && clearInterval(intervalInvoicePrice);
-            intervalLogin && clearInterval(intervalLogin);
             intervalUnconfirmed && clearInterval(intervalUnconfirmed);
             intervalTimer && clearInterval(intervalTimer);
             websocketInvoice && websocketInvoice.close();

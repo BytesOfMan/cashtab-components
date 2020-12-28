@@ -70,13 +70,6 @@ const CompleteCover = styled.div`
     background-color: ${colors.success500};
 `;
 
-const LoginCover = styled.div`
-    ${cover};
-    font-size: 16px;
-    border-color: ${colors.pending700};
-    background-color: ${colors.pending500};
-`;
-
 const WarningCover = styled.div`
     ${cover};
     font-size: 16px;
@@ -121,7 +114,6 @@ class Button extends React.PureComponent<Props> {
         const isFresh = step === 'fresh';
         const isPending = step === 'pending';
         const isComplete = step === 'complete';
-        const isLogin = step === 'login';
         const isInstall = step === 'install';
 
         return (
@@ -143,7 +135,7 @@ class Button extends React.PureComponent<Props> {
                         <CheckSVG />
                     </CompleteCover>
                 )}
-                {isLogin && <LoginCover>Login to CashTab</LoginCover>}
+                
                 {isInstall && (
                     <WarningCover>
                         <A href={Ticker.installLink} target="_blank">
