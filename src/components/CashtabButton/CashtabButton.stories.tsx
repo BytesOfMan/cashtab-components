@@ -285,48 +285,5 @@ storiesOf('CashtabButton', module)
             notes:
                 'Controlled step overrides the component step state.  Valuable for payment systems where the app/backend does payment confirmation.',
         },
-    )
-    .add(
-        `BIP70 Invoicing - ${Ticker.coinSymbol}, expired`,
-        () => (
-            <CashtabButton
-                paymentRequestUrl={text(
-                    'Invoice URL',
-                    //'https://yourInvoiceUrlHere.com/String'
-                    'https://pay.bitcoin.com/i/7UG3Z5y56DoXLQzQJAJxoD',
-                )}
-                showAmount={boolean('showAmount', true)}
-                successFn={() => console.log('BIP70 Invoice successfully paid')}
-                failFn={() =>
-                    console.log(
-                        'BIP70 Invoice is expired or the URL is invalid',
-                    )
-                }
-            />
-        ),
-        {
-            notes: `Expired ${Ticker.coinSymbol} invoice with no conflicting props`,
-        },
-    )
-    .add(
-        `BIP70 Invoicing - ${Ticker.tokenTicker}, Paid`,
-        () => (
-            <CashtabButton
-                paymentRequestUrl={text(
-                    'Invoice URL',
-                    //'https://yourInvoiceUrlHere.com/String'
-                    'https://pay.bitcoin.com/i/DFFwn544tB2A2YvekWd3Y9',
-                )}
-                showAmount={boolean('showAmount', true)}
-                successFn={() => console.log('BIP70 Invoice successfully paid')}
-                failFn={() =>
-                    console.log(
-                        'BIP70 Invoice is expired or the URL is invalid',
-                    )
-                }
-            />
-        ),
-        {
-            notes: `Paid ${Ticker.tokenTicker} invoice with no conflicting props`,
-        },
     );
+    

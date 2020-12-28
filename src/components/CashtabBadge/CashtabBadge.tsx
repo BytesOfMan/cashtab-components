@@ -14,7 +14,6 @@ import type { ButtonStates, CashtabBaseProps } from '../../hoc/CashtabBase';
 import colors from '../../styles/colors';
 
 import PriceDisplay from '../PriceDisplay';
-import InvoiceTimer from '../InvoiceTimer';
 
 import Button from '../../atoms/Button';
 import ButtonQR from '../../atoms/ButtonQR';
@@ -49,18 +48,6 @@ const Prices = styled.div`
     justify-content: end;
 `;
 
-const PriceText = styled.p`
-    font-family: monospace;
-    font-size: 16px;
-    line-height: 1em;
-    margin: 0;
-    display: grid;
-    grid-gap: 5px;
-    grid-auto-flow: column;
-    justify-content: flex-end;
-    align-items: center;
-`;
-
 const ButtonContainer = styled.div`
     min-height: 40px;
     display: grid;
@@ -83,17 +70,6 @@ const A = styled.a`
     }
 `;
 
-interface invoiceInfoOutputsObjs {
-    token_id: string;
-    send_amounts: string;
-}
-
-interface invoiceInfoObj {
-    fiatTotal?: number;
-    currency?: string;
-    outputs?: Array<invoiceInfoOutputsObjs>;
-}
-
 // Cashtab Badge Props
 type Props = CashtabBaseProps & {
     text?: string;
@@ -109,10 +85,6 @@ type Props = CashtabBaseProps & {
     showBrand?: boolean;
     showQR?: boolean;
     showBorder?: boolean;
-
-    invoiceInfo?: invoiceInfoObj;
-    invoiceTimeLeftSeconds?: number;
-    invoiceFiat?: number;
 
     handleClick: Function;
 };
@@ -148,19 +120,11 @@ class CashtabBadge extends React.PureComponent<Props> {
 
             showAmount,
             showQR,
-            paymentRequestUrl,
-            invoiceInfo,
-            invoiceTimeLeftSeconds,
-            invoiceFiat,
+            
             showBorder,
             showBrand,
         } = this.props;
-
-        // Handle cases for displaying price
-        // Case 1: no bip70 invoice
-        // Case 2: bip70 invoice, supported pay.bitcoin.com invoice with websocket info over-riding props, showAmount={true}
-        // Case 3: bip70 invoice, no supported websocket price updating, only display a "Bip70 invoice" label and no cointype or price, OR valid invoice but showAmount={false}; a bip70 invoice must be labeled as such even if showAmount={false} and price in props must be over-ridden
-
+        
         // Case 1: no bip70 invoice
         let displayedPriceInfo = (
             <Prices>
@@ -181,50 +145,13 @@ class CashtabBadge extends React.PureComponent<Props> {
                 )}
             </Prices>
         );
-        // Case 2: bip70 invoice, supported pay.bitcoin.com invoice with websocket info over-riding props, showAmount={true}
-        if (
-            showAmount &&
-            paymentRequestUrl &&
-            invoiceInfo &&
-            invoiceInfo.currency
-        ) {
-            displayedPriceInfo = (
-                <Prices>
-                    {invoiceFiat !== undefined && (
-                        <PriceDisplay
-                            preSymbol={getCurrencyPreSymbol(currency)}
-                            price={formatPriceDisplay(invoiceFiat)}
-                            symbol={currency}
-                        />
-                    )}
-
-                    <PriceDisplay
-                        coinType={coinType}
-                        price={formatAmount(amount, coinDecimals)}
-                        symbol={coinSymbol}
-                        name={coinName}
-                    />
-                </Prices>
-            );
-            // Case 3: bip70 invoice, no supported websocket price updating, only display a "Bip70 invoice" label and no cointype or price, OR valid invoice but showAmount={false}
-            // Bip70 invoice must be labeled as such if amounts are not shown
-        } else if (paymentRequestUrl) {
-            displayedPriceInfo = (
-                <Prices>
-                    <PriceText>BIP70 Invoice</PriceText>
-                </Prices>
-            );
-        }
+        
         return (
             <Outer>
                 <Main showBorder={showBorder}>
                     <H3>{text}</H3>
                     {displayedPriceInfo}
-                    {invoiceTimeLeftSeconds !== undefined && (
-                        <InvoiceTimer
-                            invoiceTimeLeftSeconds={invoiceTimeLeftSeconds}
-                        />
-                    )}
+                    
                     <ButtonContainer>
                         {showQR ? (
                             <ButtonQR
@@ -232,7 +159,6 @@ class CashtabBadge extends React.PureComponent<Props> {
                                 step={step}
                                 amountSatoshis={amount}
                                 toAddress={to}
-                                paymentRequestUrl={paymentRequestUrl}
                             >
                                 <Text>{tag}</Text>
                             </ButtonQR>
