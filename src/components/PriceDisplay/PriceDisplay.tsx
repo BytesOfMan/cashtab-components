@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import Ticker from '../../atoms/Ticker/'
 
-import type { ValidCoinTypes } from '../../hoc/BadgerBase';
+import type { ValidCoinTypes } from '../../hoc/CashtabBase';
 
 import Small from '../../atoms/Small';
 

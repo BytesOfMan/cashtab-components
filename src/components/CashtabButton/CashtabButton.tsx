@@ -18,22 +18,11 @@ import type {
 } from '../../hoc/CashtabBase';
 
 import PriceDisplay from '../PriceDisplay';
-import InvoiceTimer from '../InvoiceTimer';
 
 import Button from '../../atoms/Button';
 import ButtonQR from '../../atoms/ButtonQR';
 import Small from '../../atoms/Small';
 import Text from '../../atoms/Text';
-
-const SatoshiText = styled.p`
-    font-size: 12px;
-    margin: 0;
-    display: grid;
-    grid-template-columns: max-content max-content max-content;
-    justify-content: end;
-    grid-gap: 5px;
-    align-items: center;
-`;
 
 const Outer = styled.div`
     display: grid;
@@ -53,29 +42,6 @@ const Wrapper = styled('div')<{ hasBorder?: boolean }>`
     border-radius: 4px;
 `;
 
-const PriceText = styled.p`
-    font-family: monospace;
-    font-size: 16px;
-    line-height: 1em;
-    margin: 0;
-    display: grid;
-    grid-gap: 5px;
-    grid-auto-flow: column;
-    justify-content: flex-end;
-    align-items: center;
-`;
-
-interface invoiceInfoOutputsObjs {
-    token_id: string;
-    send_amounts: string;
-}
-
-interface invoiceInfoObj {
-    fiatTotal?: number;
-    currency?: string;
-    outputs?: Array<invoiceInfoOutputsObjs>;
-}
-
 // Cashtab Button Props
 type Props = CashtabBaseProps & {
     text?: string;
@@ -87,10 +53,6 @@ type Props = CashtabBaseProps & {
     coinSymbol: string;
     coinDecimals?: number;
     coinName?: string;
-
-    invoiceInfo?: invoiceInfoObj;
-    invoiceTimeLeftSeconds?: number;
-    invoiceFiat?: number;
 
     handleClick: Function;
     step: ButtonStates;
@@ -122,36 +84,22 @@ class CashtabButton extends React.PureComponent<Props> {
             text,
             showBorder,
             showQR,
-            paymentRequestUrl,
-
-            invoiceInfo,
-            invoiceTimeLeftSeconds,
-            invoiceFiat,
+            
         } = this.props;
 
-        // buttonPriceDisplay -- handle different cases for BIP70 invoices
 
         // buttonPriceDisplay if no price, or if a bip70 invoice is set from a server without supported websocket updates
         let buttonPriceDisplay = <Text>Cashtab Pay</Text>;
 
         // buttonPriceDisplay of price set in props and no invoice is set
-        if (price && !paymentRequestUrl) {
+        if (price) {
             buttonPriceDisplay = (
                 <Text>
                     {getCurrencyPreSymbol(currency)} {formatPriceDisplay(price)}
                     <Small> {currency}</Small>
                 </Text>
             );
-            // buttonPriceDisplay if valid bip70 invoice with price information is available
-        } else if (paymentRequestUrl && invoiceFiat !== undefined) {
-            buttonPriceDisplay = (
-                <Text>
-                    {getCurrencyPreSymbol(currency)}{' '}
-                    {formatPriceDisplay(invoiceFiat)}
-                    <Small> {currency}</Small>
-                </Text>
-            );
-        }
+        } 
 
         let determinedShowAmount = (
             <PriceDisplay
@@ -163,13 +111,7 @@ class CashtabButton extends React.PureComponent<Props> {
         );
         if (!showAmount) {
             determinedShowAmount = <React.Fragment></React.Fragment>;
-        } else if (
-            showAmount &&
-            paymentRequestUrl &&
-            (!invoiceInfo || !invoiceInfo.currency)
-        ) {
-            determinedShowAmount = <PriceText>BIP70 Invoice</PriceText>;
-        }
+        } 
         return (
             <Outer>
                 <Wrapper hasBorder={showBorder}>
@@ -180,7 +122,6 @@ class CashtabButton extends React.PureComponent<Props> {
                             toAddress={to}
                             onClick={handleClick}
                             step={step}
-                            paymentRequestUrl={paymentRequestUrl}
                         >
                             {buttonPriceDisplay}
                         </ButtonQR>
@@ -192,11 +133,7 @@ class CashtabButton extends React.PureComponent<Props> {
 
                     {determinedShowAmount}
 
-                    {invoiceTimeLeftSeconds !== undefined && (
-                        <InvoiceTimer
-                            invoiceTimeLeftSeconds={invoiceTimeLeftSeconds}
-                        />
-                    )}
+                    
                 </Wrapper>
             </Outer>
         );
