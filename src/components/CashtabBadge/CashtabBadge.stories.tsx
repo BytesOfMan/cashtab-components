@@ -1,16 +1,16 @@
 import React from 'react';
-
 import  Ticker from '../../atoms/Ticker/'
 
 import { storiesOf } from '@storybook/react/dist/client/preview';
-import { array, select, text, boolean, number } from '@storybook/addon-knobs';
+import { array, boolean, number, select, text } from '@storybook/addon-knobs';
 
-import BadgerButton from './BadgerButton';
+import CashtabBadge from './CashtabBadge';
+
 import { currencyOptions } from '../../utils/currency-helpers';
 
 const defaultOpReturn = [
     '0x6d02',
-    `Learn to build on ${Ticker.coinSymbol} at https://bitcoinabc.org/`,
+    'Try out Cashtab at https://cashtabapp.com/',
 ];
 
 // [ SPICE, NAKAMOTO, DOGECASH, BROC ]
@@ -21,92 +21,77 @@ const tokenIdOptions = [
     '259908ae44f46ef585edef4bcc1e50dc06e4c391ac4be929fae27235b8158cf1',
 ];
 
-storiesOf('BadgerButton', module)
-    .add(
-        'default',
-        () => (
-            <BadgerButton
-                price={number('Price', 0.05)}
-                currency={select('Currency', currencyOptions, 'USD')}
-                to={text(
-                    'To Address',
-                    'bitcoincash:qppc593r2hhksvrz5l77n5yd6usrj74waqnqemgjgf',
-                )}
-                opReturn={array('OP_RETURN', [])}
-                successFn={() => console.log('success example function called')}
-                failFn={() => console.log('fail example function called')}
-            />
-        ),
-        {
-            notes:
-                'Basic Badger Button.  Perfect for adding Badger integration to an existing flow, or in a minimal way.  Default has all the knobs to play with',
-        },
-    )
+storiesOf('CashtabBadge', module)
     .add(
         'most knobs',
         () => (
-            <BadgerButton
+            <CashtabBadge
                 price={number('Price', 0.0025)}
                 currency={select('Currency', currencyOptions, 'USD')}
                 to={text(
                     'To Address',
                     'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
                 )}
-                isRepeatable={boolean('repeatable', true)}
-                repeatTimeout={number('repeat timeout (ms)', 4000)}
-                opReturn={array('OP_RETURN', defaultOpReturn)}
-                successFn={() => console.log('success example function called')}
-                failFn={() => console.log('fail example function called')}
-                text={text('Top Text', 'Badger Pay')}
-                showAmount={boolean('Toggle coin amount', true)}
-                showBorder={boolean('Toggle Border', true)}
-                showQR={boolean('Show QR', false)}
+                opReturn={array('OP_RETURN', [])}
+                tag={text('Button Text', 'CashTab Pay')}
+                text={text('Top Text', 'Payment Total')}
+                isRepeatable={boolean('Repeatable payment', false)}
+                repeatTimeout={number('Repeat Timeout (ms)', 4000)}
+                watchAddress={boolean('Watch Address All', true)}
+                showBrand={boolean('Toggle Brand', false)}
+                showAmount={boolean('Toggle Amount', true)}
+                showQR={boolean('Toggle QR', true)}
+                showBorder={boolean('Toggle Border', false)}
+                successFn={() => console.log('success')}
+                failFn={() => console.log('fail')}
             />
         ),
         {
             notes:
-                'Play with all the props in the knobs tab to try out what BadgerButtons can do',
+                'Cashtab Badges are perfect for showing the price and amount in a simple clean all in one component.  Default has knobs to experiment with all settings',
         },
     )
     .add(
         'minimal look',
         () => (
-            <BadgerButton
+            <CashtabBadge
                 amount={0.0001}
                 to={text(
                     'To Address',
                     'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
                 )}
-                showSatoshis={false}
-                showQR={boolean('QR?', true)}
+                text={''} 
+                showAmount={false}
+                showQR={boolean('Toggle QR', true)}
             />
         ),
         {
-            notes: 'minimal look',
+            notes: 'Minimal look of Badge',
         },
     )
     .add(
         'price in fiat',
         () => (
-            <BadgerButton
+            <CashtabBadge
                 price={number('Price', 0.0025)}
                 currency={select('Currency', currencyOptions, 'USD')}
-                text="Pay with Badger"
                 to={text(
                     'To Address',
                     'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
                 )}
+                successFn={() => console.log('success')}
+                failFn={() => console.log('fail')}
             />
         ),
         {
             notes:
-                `Change the currency and price to charge in any fiat currency equivalent of ${Ticker.coinSymbol}`,
+                `Pay in any currency, and automagically convert the amount to ${Ticker.coinSymbol}`,
         },
     )
     .add(
         `price in ${Ticker.coinSymbol}`,
         () => (
-            <BadgerButton
+            <CashtabBadge
                 coinType={Ticker.coinSymbol}
                 amount={number('Amount', 0.0001)}
                 to={text(
@@ -116,13 +101,13 @@ storiesOf('BadgerButton', module)
             />
         ),
         {
-            notes: 'Without a text prop, it only shows the price',
+            notes: `Price in ${Ticker.coinSymbol} absolute value`,
         },
     )
     .add(
         `price in ${Ticker.tokenTicker} tokens`,
         () => (
-            <BadgerButton
+            <CashtabBadge
                 to={text(
                     'To Address',
                     'simpleledger:qq6qcjt6xlkeqzdwkhdvfyl2q2d2wafkgg8phzcqez',
@@ -130,9 +115,10 @@ storiesOf('BadgerButton', module)
                 coinType={Ticker.tokenTicker}
                 tokenId={
                     text('Token ID', '') ||
-                    select('Token ID select', tokenIdOptions, tokenIdOptions[0])
+                    select('Token ID Select', tokenIdOptions, tokenIdOptions[0])
                 }
                 amount={number('Amount', 5)}
+                tag="Send Tokens"
                 text={`Send ${Ticker.tokenTicker} tokens`}
             />
         ),
@@ -141,34 +127,37 @@ storiesOf('BadgerButton', module)
         },
     )
     .add(
-        'optional text',
+        'custom text',
         () => (
-            <BadgerButton
+            <CashtabBadge
                 price={0.0025}
                 currency={'USD'}
                 to={text(
                     'To Address',
                     'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
                 )}
-                text={text('text', 'Change this text in section below')}
-                successFn={() => console.log('success example function called')}
-                failFn={() => console.log('fail example function called')}
+                tag={text('Button Text', 'And the CTA')}
+                text={text('Top Text', 'Customize the Title')}
+                successFn={() => console.log('success')}
+                failFn={() => console.log('fail')}
             />
         ),
         {
-            notes: 'Without a text prop, it only shows the price',
+            notes: 'Customize the title and button text',
         },
     )
     .add(
-        'optional QR code',
+        'toggle QR code',
         () => (
-            <BadgerButton
-                amount={0.0001}
-                showQR={boolean('show QR', true)}
+            <CashtabBadge
+                price={number('Price', 0.0025)}
                 to={text(
                     'To Address',
                     'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
                 )}
+                showQR={boolean('Toggle QR', false)}
+                successFn={() => console.log('success')}
+                failFn={() => console.log('fail')}
             />
         ),
         {
@@ -176,19 +165,18 @@ storiesOf('BadgerButton', module)
                 'Optional QR code in addition to Button.  Only shows if transaction fully compatible in a URI',
         },
     )
-
     .add(
         'toggle coin amount',
         () => (
-            <BadgerButton
-                showAmount={boolean('Toggle coin amount', false)}
+            <CashtabBadge
                 price={0.0025}
-                currency={'USD'}
-                text="Pay now"
                 to={text(
                     'To Address',
                     'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
                 )}
+                showAmount={boolean('Show Satoshis', false)}
+                successFn={() => console.log('success')}
+                failFn={() => console.log('fail')}
             />
         ),
         {
@@ -196,30 +184,29 @@ storiesOf('BadgerButton', module)
         },
     )
     .add(
-        'toggle border',
+        'toggle Cashtab info',
         () => (
-            <BadgerButton
+            <CashtabBadge
                 price={0.0025}
-                showBorder={boolean('Toggle Border', true)}
-                currency={'USD'}
                 to={text(
                     'To Address',
                     'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
                 )}
+                showBrand={boolean('Cashtab info', true)}
+                successFn={() => console.log('success')}
+                failFn={() => console.log('fail')}
             />
         ),
         {
-            notes: 'Change the currency and price',
+            notes: 'Choose to display a link to the Cashtab homepage',
         },
     )
     .add(
-        'OP_RETURN',
+        'toggle border',
         () => (
-            <BadgerButton
+            <CashtabBadge
                 price={0.0025}
-                currency={'USD'}
-                opReturn={array('OP_RETURN', defaultOpReturn)}
-                text="With OP_RETURN"
+                showBorder={boolean('Toggle Border', true)}
                 to={text(
                     'To Address',
                     'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
@@ -227,14 +214,14 @@ storiesOf('BadgerButton', module)
             />
         ),
         {
-            notes: 'Change the currency and price',
+            notes: 'Toggle border',
         },
     )
     .add(
         'repeatable payments',
         () => (
-            <BadgerButton
-                amount={0.0001}
+            <CashtabBadge
+                price={number('Price', 0.0025)}
                 to={text(
                     'To Address',
                     'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
@@ -249,15 +236,50 @@ storiesOf('BadgerButton', module)
         },
     )
     .add(
+        'payment functions',
+        () => (
+            <CashtabBadge
+                price={0.0025}
+                to={text(
+                    'To Address',
+                    'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
+                )}
+                successFn={() => alert('Custom Success function called')}
+                failFn={() => alert('Custom Fail / Cancel function called ')}
+            />
+        ),
+        {
+            notes: 'Custom functions called on Successful and Failed payments',
+        },
+    )
+    .add(
+        'OP_RETURN',
+        () => (
+            <CashtabBadge
+                price={0.0025}
+                currency={'USD'}
+                opReturn={array('OP_RETURN', defaultOpReturn)}
+                text="With OP_RETURN"
+                to={text(
+                    'To Address',
+                    'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
+                )}
+            />
+        ),
+        {
+            notes: 'Modify the OP_RETURN value when paid with Cashtab wallet',
+        },
+    )
+    .add(
         'watch all sources',
         () => (
-            <BadgerButton
+            <CashtabBadge
                 amount={0.0001}
                 to={text(
                     'To Address',
                     'bitcoincash:pp8skudq3x5hzw8ew7vzsw8tn4k8wxsqsv0lt0mf3g',
                 )}
-                watchAddress={boolean('Watch Address', true)}
+                watchAddress={boolean('watch Address All', true)}
             />
         ),
         {
@@ -268,7 +290,7 @@ storiesOf('BadgerButton', module)
     .add(
         'controlled step',
         () => (
-            <BadgerButton
+            <CashtabBadge
                 amount={0.0001}
                 to={text(
                     'To Address',
@@ -289,7 +311,7 @@ storiesOf('BadgerButton', module)
     .add(
         `BIP70 Invoicing - ${Ticker.coinSymbol}, expired`,
         () => (
-            <BadgerButton
+            <CashtabBadge
                 paymentRequestUrl={text(
                     'Invoice URL',
                     //'https://yourInvoiceUrlHere.com/String'
@@ -311,7 +333,7 @@ storiesOf('BadgerButton', module)
     .add(
         `BIP70 Invoicing - ${Ticker.tokenTicker}, Paid`,
         () => (
-            <BadgerButton
+            <CashtabBadge
                 paymentRequestUrl={text(
                     'Invoice URL',
                     //'https://yourInvoiceUrlHere.com/String'

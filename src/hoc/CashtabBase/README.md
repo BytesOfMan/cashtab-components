@@ -1,7 +1,7 @@
-# Badger Base (HOC)
+# Cashtab Base (HOC)
 
-The base life-cycle and state methods for Badger functionality and integration.  
-Badger buttons and badges get wrapped in this Higher Order Component (HOC), which provides it with the key functions and state to deal with Badger Payments.
+The base life-cycle and state methods for Cashtab functionality and integration.  
+Cashtab buttons and badges get wrapped in this Higher Order Component (HOC), which provides it with the key functions and state to deal with Cashtab Payments.
 
 ## What it does
 

@@ -1,5 +1,3 @@
-// @flow
-
 import * as React from 'react';
 import styled, { css } from 'styled-components';
 
@@ -7,11 +5,11 @@ import {
     getCurrencyPreSymbol,
     formatPriceDisplay,
     formatAmount,
-} from '../../utils/badger-helpers';
+} from '../../utils/cashtab-helpers';
 
-import BadgerBase from '../../hoc/BadgerBase';
+import CashtabBase from '../../hoc/CashtabBase';
 
-import type { ButtonStates, BadgerBaseProps } from '../../hoc/BadgerBase';
+import type { ButtonStates, CashtabBaseProps } from '../../hoc/CashtabBase';
 
 import colors from '../../styles/colors';
 
@@ -96,8 +94,8 @@ interface invoiceInfoObj {
     outputs?: Array<invoiceInfoOutputsObjs>;
 }
 
-// Badger Badger Props
-type Props = BadgerBaseProps & {
+// Cashtab Badge Props
+type Props = CashtabBaseProps & {
     text?: string;
     tag?: string;
     step: ButtonStates;
@@ -119,7 +117,7 @@ type Props = BadgerBaseProps & {
     handleClick: Function;
 };
 
-class BadgerBadge extends React.PureComponent<Props> {
+class CashtabBadge extends React.PureComponent<Props> {
     static defaultProps = {
         currency: 'USD',
         tag: 'CashTab Pay',
@@ -248,10 +246,10 @@ class BadgerBadge extends React.PureComponent<Props> {
                             <BrandBottom>
                                 <Small>
                                     <A
-                                        href="badger.bitcoin.com"
+                                        href="https://bitcoinabc.org/"
                                         target="_blank"
                                     >
-                                        What is Badger
+                                        What is Cashtab
                                     </A>
                                 </Small>
                             </BrandBottom>
@@ -263,4 +261,4 @@ class BadgerBadge extends React.PureComponent<Props> {
     }
 }
 
-export default BadgerBase(BadgerBadge);
+export default CashtabBase(CashtabBadge);

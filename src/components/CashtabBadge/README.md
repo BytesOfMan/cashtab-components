@@ -1,13 +1,13 @@
-# BadgerBadge
+# CashtabBadge
 
-This component renders a basic BadgerBadge.  
-A Payment Badge for us with the Badger wallet.
+This component renders a basic CashtabBadge.  
+A Payment Badge for us with the Cashtab wallet.
 
 ## Example Usage
 
 ```jsx
 import React from 'react';
-import { BadgerBadge } from 'badger-components-react';
+import { CashtabBadge } from 'cashtab-components-react';
 
 class MyClass extends React.Component {
     successFn() {
@@ -25,13 +25,13 @@ class MyClass extends React.Component {
 
         return (
             <section>
-                <BadgerBadge
+                <CashtabBadge
                     to={paymentAddress}
                     price={price}
                     currency={currency}
                     successFn={this.successFn}
                     failFn={this.failFn}
-                    opReturn={['0x6d02', 'Hello BadgerBadge']}
+                    opReturn={['0x6d02', 'Hello CashtabBadge']}
                     tag="Send Now"
                     text="Complete Payment"
                     showQR={true}

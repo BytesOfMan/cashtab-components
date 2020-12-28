@@ -3,7 +3,7 @@ import styled, { css, keyframes } from 'styled-components';
 
 import QRCode from 'qrcode.react';
 
-import type { ButtonStates } from '../../hoc/BadgerBase';
+import type { ButtonStates } from '../../hoc/CashtabBase';
 import colors from '../../styles/colors';
 
 import CheckSVG from '../../images/CheckSVG';
@@ -11,6 +11,16 @@ import XSVG from '../../images/XSVG';
 import LoadSVG from '../../images/LoadSVG';
 
 import Text from '../Text';
+
+type Props = {
+    step: ButtonStates;
+    children: React.ReactNode;
+    toAddress: string;
+    amountSatoshis?: number;
+    sizeQR: number;
+    paymentRequestUrl?: string;
+    onClick?: Function;
+};
 
 // May not need this wrapper.
 const Wrapper = styled.div`
@@ -38,7 +48,7 @@ const A = styled.a`
     text-decoration: none;
 `;
 
-const ButtonElement = styled('button')<{ isFresh: boolean }>`
+const ButtonElement = styled('button')<{ isFresh: boolean, disabled: boolean }>`
     cursor: pointer;
     border: none;
     position: relative;
@@ -127,16 +137,6 @@ const PendingSpinner = styled.div`
     justify-content: center;
 `;
 
-type Props = {
-    step: ButtonStates;
-    children: React.ReactNode;
-    toAddress: string;
-    amountSatoshis?: number;
-    sizeQR: number;
-    paymentRequestUrl?: string;
-    onClick?: Function;
-};
-
 class ButtonQR extends React.PureComponent<Props> {
     static defaultProps = {
         sizeQR: 125,
@@ -200,7 +200,7 @@ class ButtonQR extends React.PureComponent<Props> {
                         </a>
                     </QRCodeWrapper>
 
-                    <ButtonElement
+                    <ButtonElement<Props | any>
                         disabled={!isFresh}
                         isFresh={isFresh}
                         {...this.props}

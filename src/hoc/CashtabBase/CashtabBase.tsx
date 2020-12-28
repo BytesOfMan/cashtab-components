@@ -9,9 +9,9 @@ import {
     adjustAmount,
     getAddressUnconfirmed,
     getTokenInfo,
-} from '../../utils/badger-helpers';
+} from '../../utils/cashtab-helpers';
 
-import Ticker from '../../atoms/Ticker/'
+import Ticker from '../../atoms/Ticker'
 
 import bitcoincomLink from 'bitcoincom-link';
 
@@ -61,7 +61,7 @@ const URI_CHECK_INTERVAL = 10 * SECOND;
 // Whitelist of valid coinType.
 type ValidCoinTypes = string;
 
-// TODO - Login/Install are badger states, others are payment states.  Separate them to be independent
+// TODO - Login/Install are Cashtab (login to be removed) states, others are payment states.  Separate them to be independent
 type ButtonStates =
     | 'fresh'
     | 'pending'
@@ -81,7 +81,7 @@ interface invoiceInfoObj {
     outputs?: Array<invoiceInfoOutputsObjs>;
 }
 
-type BadgerBaseProps = {
+type CashtabBaseProps = {
     to: string;
     stepControlled?: ButtonStates;
 
@@ -131,8 +131,8 @@ interface IState {
     websocketInvoice?: WebSocket;
 }
 
-const BadgerBase = (Wrapped: React.ComponentType<any>) => {
-    return class extends React.Component<BadgerBaseProps, IState> {
+const CashtabBase = (Wrapped: React.ComponentType<any>) => {
+    return class extends React.Component<CashtabBaseProps, IState> {
         static defaultProps = {
             currency: 'USD',
             coinType: Ticker.coinSymbol,
@@ -284,15 +284,15 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
 
             if (paymentRequestUrl) {
                 this.setState({ step: 'pending' });
-                console.info('Badger payInvoice begin', paymentRequestUrl);
+                console.info('Cashtab payInvoice begin', paymentRequestUrl);
                 payInvoice({ url: paymentRequestUrl })
                     .then(({ memo }: any) => {
-                        console.info('Badger send success:', memo);
+                        console.info('Cashtab send success:', memo);
                         successFn && successFn(memo);
                         this.paymentSendSuccess();
                     })
                     .catch((err: object) => {
-                        console.info('Badger send cancel', err);
+                        console.info('Cashtab send cancel', err);
                         failFn && failFn(err);
                         this.setState({ step: 'fresh' });
                     });
@@ -313,15 +313,15 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
             }
 
             this.setState({ step: 'pending' });
-            console.info('Badger sendAssets begin', sendParams);
+            console.info('Cashtab sendAssets begin', sendParams);
             sendAssets(sendParams)
                 .then(({ txid }: any) => {
-                    console.info('Badger send success:', txid);
+                    console.info('Cashtab send success:', txid);
                     successFn && successFn(txid);
                     this.paymentSendSuccess();
                 })
                 .catch((err: any) => {
-                    console.info('Badger send cancel', err);
+                    console.info('Cashtab send cancel', err);
                     failFn && failFn(err);
                     this.setState({ step: 'fresh' });
                 });
@@ -597,7 +597,7 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
             websocketInvoice && websocketInvoice.close();
         }
 
-        componentDidUpdate(prevProps: BadgerBaseProps, prevState: IState) {
+        componentDidUpdate(prevProps: CashtabBaseProps, prevState: IState) {
             if (typeof window !== 'undefined') {
                 const {
                     currency,
@@ -762,6 +762,6 @@ const BadgerBase = (Wrapped: React.ComponentType<any>) => {
     };
 };
 
-export type { BadgerBaseProps, ButtonStates, ValidCoinTypes };
+export type { CashtabBaseProps, ButtonStates, ValidCoinTypes };
 
-export default BadgerBase;
+export default CashtabBase;
