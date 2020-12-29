@@ -13,19 +13,16 @@ import Ticker from '../../atoms/Ticker'
 
 import type { CurrencyCode } from '../../utils/currency-helpers';
 
-const getCashTabProviderStatus = () => {
-    console.log(`getCashTabProviderStatus`)
+const getCashTabProviderStatus = () => {    
     console.log(window.bitcoinAbc)
     if (
-                    window &&
-                    window.bitcoinAbc &&
-                    window.bitcoinAbc === 'cashtab'
+        window &&
+        window.bitcoinAbc &&
+        window.bitcoinAbc === 'cashtab'
     ) {
         return true;
     }
     return false;
-        
-
 }
 
 declare global {

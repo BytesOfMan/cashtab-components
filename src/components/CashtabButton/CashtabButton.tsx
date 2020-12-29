@@ -43,7 +43,7 @@ const Wrapper = styled('div')<{ hasBorder?: boolean }>`
 `;
 
 // Cashtab Button Props
-type Props = CashtabBaseProps & {
+type CashtabButtonProps = CashtabBaseProps & {
     text?: string;
 
     showAmount?: boolean;
@@ -58,7 +58,7 @@ type Props = CashtabBaseProps & {
     step: ButtonStates;
 };
 
-class CashtabButton extends React.PureComponent<Props> {
+class CashtabButton extends React.PureComponent<CashtabButtonProps> {
     static defaultProps = {
         showAmount: true,
         showBorder: false,
@@ -139,5 +139,7 @@ class CashtabButton extends React.PureComponent<Props> {
         );
     }
 }
+
+export type { CashtabButtonProps };
 
 export default CashtabBase(CashtabButton);
