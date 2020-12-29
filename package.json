@@ -1,6 +1,6 @@
 {
-    "name": "cashtab-components-ts",
-    "version": "0.1.0",
+    "name": "cashtab-components",
+    "version": "0.0.1",
     "description": "Integrate the CashTab Wallet into your React app with ease.",
     "main": "dist/cashtab-components.js",
     "dependencies": {
@@ -32,6 +32,26 @@
         "storybook": "start-storybook -p 6006 -s public",
         "build-storybook": "build-storybook -s public"
     },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/josephroyking/cashtab-components.git"
+    },
+    "keywords": [
+        "cashtab",
+        "bitcoin abc",
+        "web payments",
+        "react component",
+        "BCHA",
+        "cashtab button",
+        "crypto payments",
+        "crypto"
+    ],
+    "author": "Joey King <joey@bitcoinabc.org>",
+    "bugs": {
+        "url": "https://github.com/josephroyking/cashtab-components/issues"
+    },
+    "homepage": "https://github.com/josephroyking/cashtab-components#readme",
+    "license": "MIT",
     "eslintConfig": {
         "extends": [
             "react-app",
