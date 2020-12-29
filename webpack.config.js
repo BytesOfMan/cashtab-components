@@ -6,7 +6,7 @@ const env = process.env.NODE_ENV;
 
 const config = {
     entry: {
-        main: ['./src/index.ts'],
+        main: ['./src/index.js'],
     },
     plugins: [],
     externals: {
@@ -39,11 +39,7 @@ const config = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: [
-                            '@babel/preset-env',
-                            '@babel/preset-react',
-                            '@babel/preset-flow',
-                        ],
+                        presets: ['@babel/preset-env', '@babel/preset-react'],
                         plugins: [
                             '@babel/plugin-proposal-class-properties',
                             [
@@ -70,7 +66,7 @@ const config = {
     resolve: {
         extensions: [
             '.tsx',
-            '.tx',
+            '.ts',
             '.js',
             '.json',
             '.png',
