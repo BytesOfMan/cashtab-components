@@ -6,7 +6,7 @@ const env = process.env.NODE_ENV;
 
 const config = {
     entry: {
-        main: ['./src/index.ts'],
+        main: ['./src/index.js'],
     },
     plugins: [],
     externals: {
@@ -31,31 +31,9 @@ const config = {
             {
                 test: /\.tsx?$/,
                 use: 'ts-loader',
-                exclude: /node_modules/,
-            },
-            {
-                test: /\.js$/,
                 exclude: [/node_modules/, '/**/stories.*/'],
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: [
-                            '@babel/preset-env',
-                            '@babel/preset-react',
-                            '@babel/preset-flow',
-                        ],
-                        plugins: [
-                            '@babel/plugin-proposal-class-properties',
-                            [
-                                '@babel/plugin-transform-runtime',
-                                {
-                                    regenerator: true,
-                                },
-                            ],
-                        ],
-                    },
-                },
             },
+
             {
                 test: /\.(png|gif|jpg|svg)$/,
                 use: {
@@ -70,7 +48,7 @@ const config = {
     resolve: {
         extensions: [
             '.tsx',
-            '.tx',
+            '.ts',
             '.js',
             '.json',
             '.png',
