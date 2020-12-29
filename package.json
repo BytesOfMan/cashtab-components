@@ -24,9 +24,9 @@
         "webpack-cli": "^4.3.0"
     },
     "scripts": {
-        "start": "react-scripts start",
-        "build": "react-scripts build",
-        "beta": "webpack --mode=production",
+        "start": "npm run storybook",
+        "build": "webpack --mode=production",
+        "prepublish": "npm run build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "storybook": "start-storybook -p 6006 -s public",

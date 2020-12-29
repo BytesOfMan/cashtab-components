@@ -96,13 +96,6 @@ const CompleteCover = styled.div`
     background-color: ${colors.success500};
 `;
 
-const ExpiredCover = styled.div`
-    ${cover};
-    border-radius: 5px;
-    border: 1px solid ${colors.expired700};
-    background-color: ${colors.expired500};
-`;
-
 const WarningCover = styled.div`
     ${cover};
     font-size: 16px;
