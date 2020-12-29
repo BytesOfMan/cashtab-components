@@ -39,26 +39,3 @@ class MyClass extends React.PureComponent {
     }
 }
 ```
-
-## Linking to a BIP 70 Invoice
-
-```jsx
-import React from 'react';
-import { CashtabButton } from 'badger-components-react';
-
-class MyClass extends React.PureComponent {
-    render() {
-        return (
-            <section>
-                <CashtabButton
-                    paymentRequestUrl={'https://yourPaymentRequestUrl/'}
-                    successFn={tx => console.log(tx)}
-                    failFn={err => console.log(err)}
-                    text="Click to pay your invoice"
-                    showAmount={false}
-                />
-            </section>
-        );
-    }
-}
-```
