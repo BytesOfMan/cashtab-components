@@ -7,7 +7,6 @@ import type { ButtonStates } from '../../hoc/CashtabBase';
 import colors from '../../styles/colors';
 
 import CheckSVG from '../../images/CheckSVG';
-import XSVG from '../../images/XSVG';
 import LoadSVG from '../../images/LoadSVG';
 
 import Text from '../Text';
@@ -156,7 +155,6 @@ class ButtonQR extends React.PureComponent<Props> {
         const isFresh = step === 'fresh';
         const isPending = step === 'pending';
         const isComplete = step === 'complete';
-        const isExpired = step === 'expired';
         const isInstall = step === 'install';
 
         return (
@@ -174,11 +172,7 @@ class ButtonQR extends React.PureComponent<Props> {
                             <CheckSVG />
                         </CompleteCover>
                     )}
-                    {isExpired && (
-                        <ExpiredCover>
-                            <XSVG />
-                        </ExpiredCover>
-                    )}
+                    
 
                     <QRCodeWrapper>
                         <a href={uri}>
