@@ -15,6 +15,7 @@
 /build
 /dist
 /storybook-static
+/generated
 
 # misc
 .DS_Store

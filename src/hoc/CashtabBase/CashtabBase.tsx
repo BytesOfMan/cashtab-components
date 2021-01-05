@@ -13,18 +13,6 @@ import Ticker from '../../atoms/Ticker'
 
 import type { CurrencyCode } from '../../utils/currency-helpers';
 
-const getCashTabProviderStatus = () => {    
-    console.log(window.bitcoinAbc)
-    if (
-        window &&
-        window.bitcoinAbc &&
-        window.bitcoinAbc === 'cashtab'
-    ) {
-        return true;
-    }
-    return false;
-}
-
 declare global {
     interface Window {
         bitcoinAbc: any;
@@ -164,6 +152,18 @@ const CashtabBase = (Wrapped: React.ComponentType<any>) => {
             
         };        
 
+        getCashTabProviderStatus = () => {    
+            console.log(window.bitcoinAbc)
+            if (
+                window &&
+                window.bitcoinAbc &&
+                window.bitcoinAbc === 'cashtab'
+            ) {
+                return true;
+            }
+            return false;
+        }
+
         handleClick = () => {
             const {
                 amount,
@@ -180,7 +180,7 @@ const CashtabBase = (Wrapped: React.ComponentType<any>) => {
                 return;
             }
 
-            const walletProviderStatus = getCashTabProviderStatus();
+            const walletProviderStatus = this.getCashTabProviderStatus();
 
             if (
                 typeof window === `undefined` ||
@@ -324,7 +324,7 @@ const CashtabBase = (Wrapped: React.ComponentType<any>) => {
 
         confirmCashTabProviderStatus = () => {
             console.log(`confirmCashTabProviderStatus called`)
-            const cashTabStatus = getCashTabProviderStatus()
+            const cashTabStatus = this.getCashTabProviderStatus()
             if (cashTabStatus) {
                 this.setState({ step: 'fresh' });
             }
@@ -344,7 +344,7 @@ const CashtabBase = (Wrapped: React.ComponentType<any>) => {
                 setTimeout(this.confirmCashTabProviderStatus, 750);
 
                 // Detect CashTab and determine if button should show install CTA
-                const walletProviderStatus = getCashTabProviderStatus();
+                const walletProviderStatus = this.getCashTabProviderStatus();
                 if (
                     walletProviderStatus
                 ) {
@@ -445,6 +445,6 @@ const CashtabBase = (Wrapped: React.ComponentType<any>) => {
     };
 };
 
-export type { CashtabBaseProps, ButtonStates, ValidCoinTypes };
+export type { CashtabBaseProps, ButtonStates, ValidCoinTypes, IState};
 
 export default CashtabBase;
