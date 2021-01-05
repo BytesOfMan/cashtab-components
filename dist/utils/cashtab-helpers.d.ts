@@ -1,0 +1,12 @@
+import type { CurrencyCode } from './currency-helpers';
+declare const buildPriceEndpoint: (currency: CurrencyCode) => string;
+declare const getAddressUnconfirmed: (address: string) => Promise<string[]>;
+declare const getTokenInfo: (coinId: string) => Promise<any>;
+declare const getCurrencyPreSymbol: (currency: CurrencyCode) => string;
+declare const formatPriceDisplay: (price?: number | undefined) => string | undefined;
+declare const formatAmount: (amount?: number | undefined, decimals?: number | undefined) => string;
+declare const priceToSatoshis: (BCHRate: number, price: number) => number;
+declare const fiatToSatoshis: (currency: CurrencyCode, price: number) => Promise<number>;
+declare const bchToFiat: (currency: CurrencyCode, price: number) => Promise<number>;
+declare const adjustAmount: (amount?: number | undefined, decimals?: number | undefined, fromSatoshis?: boolean | undefined) => string | undefined;
+export { adjustAmount, buildPriceEndpoint, fiatToSatoshis, bchToFiat, formatAmount, formatPriceDisplay, getAddressUnconfirmed, getCurrencyPreSymbol, getTokenInfo, priceToSatoshis, };
