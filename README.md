@@ -23,7 +23,7 @@ A set of React components and helpers to integrate Bitcoin ABC (BCHA) and tokens
 * [Homepage](https://bitcoinabc.org)
 * [Component Showcase](https://laughing-villani-8cfcaf.netlify.app/)
 * [Cashtab Extension](https://chrome.google.com/webstore/detail/cashtab/obldfcmebhllhjlhjbnghaipekcppeag/related)
-* [NPM page](https://www.npmjs.com/package/badger-components-react)
+* [NPM page](https://www.npmjs.com/package/cashtab-components)
 
 ### Install Component
 
