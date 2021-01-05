@@ -2,8 +2,8 @@
     "name": "cashtab-components",
     "version": "0.0.1",
     "description": "Integrate the CashTab Wallet into your React app with ease.",
-    "main": "roll/index",
-    "typings": "roll/index",
+    "main": "dist/index",
+    "typings": "dist/index",
     "peerDependencies": {
         "react": "^17.0.1",
         "react-dom": "^17.0.1"
