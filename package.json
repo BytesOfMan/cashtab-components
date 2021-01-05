@@ -31,7 +31,6 @@
     "scripts": {
         "start": "npm run storybook",
         "build": "rm -rf dist/ && webpack --mode=production",
-        "roll": "rollup -c",
         "prepublish": "npm run build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
