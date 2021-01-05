@@ -6,7 +6,7 @@ const env = process.env.NODE_ENV;
 
 const config = {
     entry: {
-        main: ['./src/index.js'],
+        main: ['./src/index.ts'],
     },
     plugins: [],
     externals: {
@@ -60,7 +60,7 @@ const config = {
     output: {
         path: path.resolve(__dirname, 'dist/'),
         publicPath: '',
-        filename: 'cashtab-components.js',
+        filename: 'index.js',
         library: '',
         libraryTarget: 'commonjs',
     },
