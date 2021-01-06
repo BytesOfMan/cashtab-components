@@ -39,7 +39,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/josephroyking/cashtab-components.git"
+        "url": "https://github.com/josephroyking/cashtab-components.git"
     },
     "keywords": [
         "cashtab",
@@ -80,9 +80,11 @@
         "@storybook/addon-essentials": "^6.1.11",
         "@storybook/addon-knobs": "^6.1.11",
         "@storybook/addon-links": "^6.1.11",
+        "@storybook/addons": "^6.1.11",
         "@storybook/node-logger": "^6.1.11",
         "@storybook/preset-create-react-app": "^3.1.5",
         "@storybook/react": "^6.1.11",
+        "@storybook/theming": "^6.1.11",
         "@types/lodash": "^4.14.165",
         "@types/qrcode.react": "^1.0.1",
         "@types/styled-components": "^5.1.7",

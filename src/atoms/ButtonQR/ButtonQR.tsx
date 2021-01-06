@@ -11,6 +11,8 @@ import LoadSVG from '../../images/LoadSVG';
 
 import Text from '../Text';
 
+import Ticker from '../../atoms/Ticker/'
+
 type Props = {
     step: ButtonStates;
     children: React.ReactNode;
@@ -184,7 +186,7 @@ class ButtonQR extends React.PureComponent<Props> {
                             <WarningCover>
                                 <Text>
                                     <A
-                                        href="https://cashtabapp.com"
+                                        href={Ticker.installLink}
                                         target="_blank"
                                     >
                                         Install CashTab & refresh
