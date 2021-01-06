@@ -42,7 +42,7 @@ declare const _default: {
         componentDidUpdate(prevProps: CashtabBaseProps, prevState: import("../../hoc/CashtabBase/CashtabBase").IState): void;
         render(): JSX.Element;
         context: any;
-        setState<K extends "step" | "coinSymbol" | "coinName" | "coinDecimals" | "errors" | "satoshis" | "unconfirmedCount" | "intervalPrice" | "intervalUnconfirmed" | "intervalTimer">(state: import("../../hoc/CashtabBase/CashtabBase").IState | ((prevState: Readonly<import("../../hoc/CashtabBase/CashtabBase").IState>, props: Readonly<CashtabBaseProps>) => import("../../hoc/CashtabBase/CashtabBase").IState | Pick<import("../../hoc/CashtabBase/CashtabBase").IState, K> | null) | Pick<import("../../hoc/CashtabBase/CashtabBase").IState, K> | null, callback?: (() => void) | undefined): void;
+        setState<K extends "coinSymbol" | "coinDecimals" | "coinName" | "step" | "errors" | "satoshis" | "unconfirmedCount" | "intervalPrice" | "intervalUnconfirmed" | "intervalTimer">(state: import("../../hoc/CashtabBase/CashtabBase").IState | ((prevState: Readonly<import("../../hoc/CashtabBase/CashtabBase").IState>, props: Readonly<CashtabBaseProps>) => import("../../hoc/CashtabBase/CashtabBase").IState | Pick<import("../../hoc/CashtabBase/CashtabBase").IState, K> | null) | Pick<import("../../hoc/CashtabBase/CashtabBase").IState, K> | null, callback?: (() => void) | undefined): void;
         forceUpdate(callback?: (() => void) | undefined): void;
         readonly props: Readonly<CashtabBaseProps> & Readonly<{
             children?: React.ReactNode;
@@ -88,7 +88,7 @@ declare const _default: {
         componentDidUpdate(prevProps: CashtabBaseProps, prevState: import("../../hoc/CashtabBase/CashtabBase").IState): void;
         render(): JSX.Element;
         context: any;
-        setState<K extends "step" | "coinSymbol" | "coinName" | "coinDecimals" | "errors" | "satoshis" | "unconfirmedCount" | "intervalPrice" | "intervalUnconfirmed" | "intervalTimer">(state: import("../../hoc/CashtabBase/CashtabBase").IState | ((prevState: Readonly<import("../../hoc/CashtabBase/CashtabBase").IState>, props: Readonly<CashtabBaseProps>) => import("../../hoc/CashtabBase/CashtabBase").IState | Pick<import("../../hoc/CashtabBase/CashtabBase").IState, K> | null) | Pick<import("../../hoc/CashtabBase/CashtabBase").IState, K> | null, callback?: (() => void) | undefined): void;
+        setState<K extends "coinSymbol" | "coinDecimals" | "coinName" | "step" | "errors" | "satoshis" | "unconfirmedCount" | "intervalPrice" | "intervalUnconfirmed" | "intervalTimer">(state: import("../../hoc/CashtabBase/CashtabBase").IState | ((prevState: Readonly<import("../../hoc/CashtabBase/CashtabBase").IState>, props: Readonly<CashtabBaseProps>) => import("../../hoc/CashtabBase/CashtabBase").IState | Pick<import("../../hoc/CashtabBase/CashtabBase").IState, K> | null) | Pick<import("../../hoc/CashtabBase/CashtabBase").IState, K> | null, callback?: (() => void) | undefined): void;
         forceUpdate(callback?: (() => void) | undefined): void;
         readonly props: Readonly<CashtabBaseProps> & Readonly<{
             children?: React.ReactNode;

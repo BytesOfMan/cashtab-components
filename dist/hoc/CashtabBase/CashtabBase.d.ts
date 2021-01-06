@@ -66,7 +66,7 @@ declare const CashtabBase: (Wrapped: React.ComponentType<any>) => {
         componentDidUpdate(prevProps: CashtabBaseProps, prevState: IState): void;
         render(): JSX.Element;
         context: any;
-        setState<K extends "step" | "coinSymbol" | "coinName" | "coinDecimals" | "errors" | "satoshis" | "unconfirmedCount" | "intervalPrice" | "intervalUnconfirmed" | "intervalTimer">(state: IState | ((prevState: Readonly<IState>, props: Readonly<CashtabBaseProps>) => IState | Pick<IState, K> | null) | Pick<IState, K> | null, callback?: (() => void) | undefined): void;
+        setState<K extends "coinSymbol" | "coinDecimals" | "coinName" | "step" | "errors" | "satoshis" | "unconfirmedCount" | "intervalPrice" | "intervalUnconfirmed" | "intervalTimer">(state: IState | ((prevState: Readonly<IState>, props: Readonly<CashtabBaseProps>) => IState | Pick<IState, K> | null) | Pick<IState, K> | null, callback?: (() => void) | undefined): void;
         forceUpdate(callback?: (() => void) | undefined): void;
         readonly props: Readonly<CashtabBaseProps> & Readonly<{
             children?: React.ReactNode;
@@ -112,7 +112,7 @@ declare const CashtabBase: (Wrapped: React.ComponentType<any>) => {
         componentDidUpdate(prevProps: CashtabBaseProps, prevState: IState): void;
         render(): JSX.Element;
         context: any;
-        setState<K extends "step" | "coinSymbol" | "coinName" | "coinDecimals" | "errors" | "satoshis" | "unconfirmedCount" | "intervalPrice" | "intervalUnconfirmed" | "intervalTimer">(state: IState | ((prevState: Readonly<IState>, props: Readonly<CashtabBaseProps>) => IState | Pick<IState, K> | null) | Pick<IState, K> | null, callback?: (() => void) | undefined): void;
+        setState<K extends "coinSymbol" | "coinDecimals" | "coinName" | "step" | "errors" | "satoshis" | "unconfirmedCount" | "intervalPrice" | "intervalUnconfirmed" | "intervalTimer">(state: IState | ((prevState: Readonly<IState>, props: Readonly<CashtabBaseProps>) => IState | Pick<IState, K> | null) | Pick<IState, K> | null, callback?: (() => void) | undefined): void;
         forceUpdate(callback?: (() => void) | undefined): void;
         readonly props: Readonly<CashtabBaseProps> & Readonly<{
             children?: React.ReactNode;
