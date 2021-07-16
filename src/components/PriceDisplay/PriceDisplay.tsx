@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-import Ticker from '../../atoms/Ticker/'
+import Ticker from '../../atoms/Ticker/';
 
 import type { ValidCoinTypes } from '../../hoc/CashtabBase';
 
@@ -49,7 +49,8 @@ class PriceDisplay extends React.PureComponent<Props> {
     render() {
         const { price, name, coinType, symbol, preSymbol } = this.props;
 
-        const CoinImage = coinType === Ticker.coinSymbol ? Ticker.logo : Ticker.tokenLogo;
+        const CoinImage =
+            coinType === Ticker.coinSymbol ? Ticker.logo : Ticker.tokenLogo;
 
         const preContent = preSymbol ? (
             <PriceText>{preSymbol}</PriceText>

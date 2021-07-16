@@ -43,7 +43,7 @@ storiesOf('Button', module)
         {
             notes: 'Payment received, at least on the front-end',
         },
-    )    
+    )
     .add(
         'install prompt',
         () => (
@@ -52,6 +52,7 @@ storiesOf('Button', module)
             </Button>
         ),
         {
-            notes: 'CashTab extension not installed, prompt user to install CashTab',
+            notes:
+                'CashTab extension not installed, prompt user to install CashTab',
         },
     );

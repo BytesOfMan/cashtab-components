@@ -3,7 +3,7 @@ type CurrencyCode =
     | 'AFN'
     | 'ALL'
     | 'AMD'
-    | 'ANG'
+    | 'AND'
     | 'AOA'
     | 'ARS'
     | 'AUD'
@@ -172,7 +172,7 @@ const currencyOptions: CurrencyCode[] = [
     'AFN',
     'ALL',
     'AMD',
-    'ANG',
+    'AND',
     'AOA',
     'ARS',
     'AUD',
@@ -342,7 +342,7 @@ const currencySymbolMap = {
     AFN: '؋',
     ALL: 'L',
     AMD: '֏',
-    ANG: 'ƒ',
+    AND: 'ƒ',
     AOA: 'Kz',
     ARS: '$',
     AUD: '$',

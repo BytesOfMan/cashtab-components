@@ -9,7 +9,7 @@ import {
     getTokenInfo,
 } from '../../utils/cashtab-helpers';
 
-import Ticker from '../../atoms/Ticker'
+import Ticker from '../../atoms/Ticker';
 
 import type { CurrencyCode } from '../../utils/currency-helpers';
 
@@ -37,12 +37,7 @@ const URI_CHECK_INTERVAL = 10 * SECOND;
 type ValidCoinTypes = string;
 
 // TODO - Install is a Cashtab state, others are payment states.  Separate them to be independent
-type ButtonStates =
-    | 'fresh'
-    | 'pending'
-    | 'complete'
-    | 'expired'
-    | 'install';
+type ButtonStates = 'fresh' | 'pending' | 'complete' | 'expired' | 'install';
 
 type CashtabBaseProps = {
     to: string;
@@ -106,7 +101,7 @@ const CashtabBase = (Wrapped: React.ComponentType<any>) => {
 
             unconfirmedCount: undefined,
 
-            intervalPrice: undefined,            
+            intervalPrice: undefined,
             intervalUnconfirmed: undefined,
             intervalTimer: undefined,
             errors: [],
@@ -124,10 +119,7 @@ const CashtabBase = (Wrapped: React.ComponentType<any>) => {
 
         paymentSendSuccess = () => {
             const { isRepeatable } = this.props;
-            const {
-                intervalUnconfirmed,
-                unconfirmedCount,
-            } = this.state;
+            const { intervalUnconfirmed, unconfirmedCount } = this.state;
 
             let unconfirmedCountInt;
 
@@ -149,11 +141,10 @@ const CashtabBase = (Wrapped: React.ComponentType<any>) => {
             } else {
                 intervalUnconfirmed && clearInterval(intervalUnconfirmed);
             }
-            
-        };        
+        };
 
-        getCashTabProviderStatus = () => {    
-            console.log(window.bitcoinAbc)
+        getCashTabProviderStatus = () => {
+            console.log(window.bitcoinAbc);
             if (
                 window &&
                 window.bitcoinAbc &&
@@ -162,16 +153,10 @@ const CashtabBase = (Wrapped: React.ComponentType<any>) => {
                 return true;
             }
             return false;
-        }
+        };
 
         handleClick = () => {
-            const {
-                amount,
-                to,
-                opReturn,
-                coinType,
-                tokenId,
-            } = this.props;
+            const { amount, to, opReturn, coinType, tokenId } = this.props;
 
             const { satoshis } = this.state;
 
@@ -182,10 +167,7 @@ const CashtabBase = (Wrapped: React.ComponentType<any>) => {
 
             const walletProviderStatus = this.getCashTabProviderStatus();
 
-            if (
-                typeof window === `undefined` ||
-                (!walletProviderStatus)
-            ) {
+            if (typeof window === `undefined` || !walletProviderStatus) {
                 this.setState({ step: 'install' });
 
                 if (typeof window !== 'undefined') {
@@ -193,24 +175,34 @@ const CashtabBase = (Wrapped: React.ComponentType<any>) => {
                 }
                 return;
             }
-            
-            if (
-                walletProviderStatus
-            ) {
+
+            if (walletProviderStatus) {
                 this.setState({ step: 'fresh' });
-                
+
+                // Do not pass a token quantity to send, this is not yet supported in Cashtab
+                if (coinType === Ticker.tokenName) {
+                    return;
+                }
+
                 return window.postMessage(
                     {
                         type: 'FROM_PAGE',
                         text: 'CashTab',
                         txInfo: {
                             address: to,
-                            value: satoshis ? (satoshis! / 1e8) : amount,
+                            value: satoshis
+                                ? parseFloat(
+                                      (
+                                          satoshis! *
+                                          10 ** (-1 * Ticker.coinDecimals)
+                                      ).toFixed(2),
+                                  )
+                                : amount,
                         },
                     },
                     '*',
                 );
-            }            
+            }
 
             const sendParams: sendParamsArr = {
                 to,
@@ -292,14 +284,12 @@ const CashtabBase = (Wrapped: React.ComponentType<any>) => {
             }, URI_CHECK_INTERVAL);
 
             this.setState({ intervalUnconfirmed: intervalUnconfirmedNext });
-        };        
+        };
 
         setupCoinMeta = async () => {
             const { coinType, tokenId } = this.props;
 
-            if (
-                coinType === Ticker.coinSymbol
-            ) {
+            if (coinType === Ticker.coinSymbol) {
                 this.setState({
                     coinSymbol: Ticker.coinSymbol,
                     coinDecimals: Ticker.coinDecimals,
@@ -323,12 +313,11 @@ const CashtabBase = (Wrapped: React.ComponentType<any>) => {
         };
 
         confirmCashTabProviderStatus = () => {
-            console.log(`confirmCashTabProviderStatus called`)
-            const cashTabStatus = this.getCashTabProviderStatus()
+            const cashTabStatus = this.getCashTabProviderStatus();
             if (cashTabStatus) {
                 this.setState({ step: 'fresh' });
             }
-        }
+        };
 
         async componentDidMount() {
             if (typeof window !== 'undefined') {
@@ -337,22 +326,19 @@ const CashtabBase = (Wrapped: React.ComponentType<any>) => {
                 // setup state, intervals, and listeners
                 watchAddress && this.setupWatchAddress();
                 price && this.setupSatoshisFiat();
-                this.setupCoinMeta(); // normal call for setupCoinMeta()        
-                
+                this.setupCoinMeta(); // normal call for setupCoinMeta()
+
                 // Occasionially the cashtab window object is not available on componentDidMount, check later
                 // TODO make this less hacky
                 setTimeout(this.confirmCashTabProviderStatus, 750);
 
                 // Detect CashTab and determine if button should show install CTA
                 const walletProviderStatus = this.getCashTabProviderStatus();
-                if (
-                    walletProviderStatus
-                ) {
+                if (walletProviderStatus) {
                     this.setState({ step: 'fresh' });
-                }
-                else {
+                } else {
                     this.setState({ step: 'install' });
-                }                
+                }
             }
         }
 
@@ -375,7 +361,6 @@ const CashtabBase = (Wrapped: React.ComponentType<any>) => {
                     isRepeatable,
                     watchAddress,
                 } = this.props;
-                
 
                 const prevCurrency = prevProps.currency;
                 const prevPrice = prevProps.price;
@@ -389,7 +374,7 @@ const CashtabBase = (Wrapped: React.ComponentType<any>) => {
 
                 if (isRepeatable && isRepeatable !== prevIsRepeatable) {
                     this.startRepeatable();
-                }                
+                }
 
                 if (watchAddress !== prevWatchAddress) {
                     if (watchAddress) {
@@ -424,9 +409,9 @@ const CashtabBase = (Wrapped: React.ComponentType<any>) => {
 
             // Only show QR if all requested features can be encoded in the BIP44 URI
             const shouldShowQR =
-                (showQR &&
-                    coinType === Ticker.coinSymbol &&
-                    (!opReturn || !opReturn.length))                   
+                showQR &&
+                coinType === Ticker.coinSymbol &&
+                (!opReturn || !opReturn.length);
 
             return (
                 <Wrapped
@@ -438,13 +423,13 @@ const CashtabBase = (Wrapped: React.ComponentType<any>) => {
                     amount={calculatedAmount}
                     coinDecimals={coinDecimals}
                     coinSymbol={coinSymbol}
-                    coinName={coinName}                    
+                    coinName={coinName}
                 />
             );
         }
     };
 };
 
-export type { CashtabBaseProps, ButtonStates, ValidCoinTypes, IState};
+export type { CashtabBaseProps, ButtonStates, ValidCoinTypes, IState };
 
 export default CashtabBase;

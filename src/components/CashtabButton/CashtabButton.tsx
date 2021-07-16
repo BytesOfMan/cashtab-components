@@ -7,15 +7,11 @@ import {
     formatAmount,
 } from '../../utils/cashtab-helpers';
 
-
 import colors from '../../styles/colors';
 
 import CashtabBase from '../../hoc/CashtabBase';
 
-import type {
-    ButtonStates,
-    CashtabBaseProps,
-} from '../../hoc/CashtabBase';
+import type { ButtonStates, CashtabBaseProps } from '../../hoc/CashtabBase';
 
 import PriceDisplay from '../PriceDisplay';
 
@@ -84,9 +80,7 @@ class CashtabButton extends React.PureComponent<CashtabButtonProps> {
             text,
             showBorder,
             showQR,
-            
         } = this.props;
-
 
         // buttonPriceDisplay if no price, or if a bip70 invoice is set from a server without supported websocket updates
         let buttonPriceDisplay = <Text>Cashtab Pay</Text>;
@@ -99,7 +93,7 @@ class CashtabButton extends React.PureComponent<CashtabButtonProps> {
                     <Small> {currency}</Small>
                 </Text>
             );
-        } 
+        }
 
         let determinedShowAmount = (
             <PriceDisplay
@@ -111,7 +105,7 @@ class CashtabButton extends React.PureComponent<CashtabButtonProps> {
         );
         if (!showAmount) {
             determinedShowAmount = <React.Fragment></React.Fragment>;
-        } 
+        }
         return (
             <Outer>
                 <Wrapper hasBorder={showBorder}>
@@ -132,8 +126,6 @@ class CashtabButton extends React.PureComponent<CashtabButtonProps> {
                     )}
 
                     {determinedShowAmount}
-
-                    
                 </Wrapper>
             </Outer>
         );

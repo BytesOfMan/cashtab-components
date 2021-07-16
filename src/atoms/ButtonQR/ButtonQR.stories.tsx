@@ -64,7 +64,7 @@ storiesOf('ButtonQR', module)
         {
             notes: 'Payment received, at least on the front-end',
         },
-    )    
+    )
     .add(
         'install prompt',
         () => (
@@ -80,6 +80,7 @@ storiesOf('ButtonQR', module)
             </ButtonQR>
         ),
         {
-            notes: 'Cashtab plugin not installed, prompt user to install Cashtab',
+            notes:
+                'Cashtab plugin not installed, prompt user to install Cashtab',
         },
     );
