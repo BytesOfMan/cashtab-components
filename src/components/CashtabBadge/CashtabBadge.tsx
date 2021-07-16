@@ -120,11 +120,11 @@ class CashtabBadge extends React.PureComponent<CashtabBadgeProps> {
 
             showAmount,
             showQR,
-            
+
             showBorder,
             showBrand,
         } = this.props;
-        
+
         // Case 1: no bip70 invoice
         let displayedPriceInfo = (
             <Prices>
@@ -145,13 +145,13 @@ class CashtabBadge extends React.PureComponent<CashtabBadgeProps> {
                 )}
             </Prices>
         );
-        
+
         return (
             <Outer>
                 <Main showBorder={showBorder}>
                     <H3>{text}</H3>
                     {displayedPriceInfo}
-                    
+
                     <ButtonContainer>
                         {showQR ? (
                             <ButtonQR

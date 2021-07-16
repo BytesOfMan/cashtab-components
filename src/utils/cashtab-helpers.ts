@@ -3,7 +3,7 @@
 import BigNumber from 'bignumber.js';
 import { currencySymbolMap } from './currency-helpers';
 import type { CurrencyCode } from './currency-helpers';
-import Ticker from '../atoms/Ticker/'        
+import Ticker from '../atoms/Ticker/';
 
 const buildPriceEndpoint = (currency: CurrencyCode) => {
     return `https://api.coingecko.com/api/v3/simple/price?ids=${Ticker.coingeckoId}&vs_currencies=${currency}&include_last_updated_at=true`;
@@ -51,10 +51,15 @@ const formatAmount = (amount?: number, decimals?: number): string => {
         return `-.`.padEnd(decimals + 2, '-');
     }
     const baseAmount = new BigNumber(amount);
-    const adjustDecimals = baseAmount
-        .shiftedBy(-1 * decimals)
-        .toFixed(decimals);
-    const removeTrailing = +adjustDecimals + '';
+    const adjustDecimals = baseAmount.shiftedBy(-1 * decimals).toFixed(2);
+    const formatForLargeNum = parseFloat(adjustDecimals).toLocaleString(
+        undefined,
+        {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        },
+    );
+    const removeTrailing = `${formatForLargeNum} `;
 
     return removeTrailing;
 };
@@ -79,7 +84,7 @@ const fiatToSatoshis = async (
     price: number,
 ): Promise<number> => {
     const priceRequest = await fetch(buildPriceEndpoint(currency));
-    const result = await priceRequest.json();    
+    const result = await priceRequest.json();
     const fiatPrice = result[Ticker.coingeckoId][currency.toLowerCase()];
     const satoshis = priceToSatoshis(fiatPrice, price);
     return satoshis;

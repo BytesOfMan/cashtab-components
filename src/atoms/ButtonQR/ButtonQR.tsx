@@ -11,7 +11,7 @@ import LoadSVG from '../../images/LoadSVG';
 
 import Text from '../Text';
 
-import Ticker from '../../atoms/Ticker/'
+import Ticker from '../../atoms/Ticker/';
 
 type Props = {
     step: ButtonStates;
@@ -48,7 +48,7 @@ const A = styled.a`
     text-decoration: none;
 `;
 
-const ButtonElement = styled('button')<{ isFresh: boolean, disabled: boolean }>`
+const ButtonElement = styled('button')<{ isFresh: boolean; disabled: boolean }>`
     cursor: pointer;
     border: none;
     position: relative;
@@ -144,7 +144,7 @@ class ButtonQR extends React.PureComponent<Props> {
 
         let uri = amountSatoshis
             ? `${uriBase}?amount=${amountSatoshis / 1e8}`
-            : uriBase;        
+            : uriBase;
 
         // State booleans
         const isFresh = step === 'fresh';
@@ -167,7 +167,6 @@ class ButtonQR extends React.PureComponent<Props> {
                             <CheckSVG />
                         </CompleteCover>
                     )}
-                    
 
                     <QRCodeWrapper>
                         <a href={uri}>
@@ -181,7 +180,7 @@ class ButtonQR extends React.PureComponent<Props> {
                         {...this.props}
                     >
                         {children}
-                       
+
                         {isInstall && (
                             <WarningCover>
                                 <Text>

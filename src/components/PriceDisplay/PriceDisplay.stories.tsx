@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Ticker from '../../atoms/Ticker'
+import Ticker from '../../atoms/Ticker';
 
 import { storiesOf } from '@storybook/react/dist/client/preview';
 import { select, number } from '@storybook/addon-knobs';
@@ -36,7 +36,7 @@ storiesOf('Price Display', module)
         },
     )
     .add(
-        'bch',
+        'xec',
         () => {
             const price = number('Price', 0.001);
             const satoshis = price * 1e8;
