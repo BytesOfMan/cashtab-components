@@ -1,3 +1,9 @@
+## Sep 16, 2021
+
+1.0.1
+
+-   Correct param decimal parsing to use XEC decimals
+
 ## Jul 16, 2021
 
 1.0.0
